@@ -10,7 +10,6 @@
 }
 
 
-
 .dismiss {
     position: absolute;
     right: 10px;
@@ -83,7 +82,7 @@
     color: #595b5f;
     font-size: 0.875rem;
     line-height: 1.5rem;
-    text-align: justify;  /* ทำให้ข้อความกระจายเต็มบรรทัด */
+    text-align: justify; /* ทำให้ข้อความกระจายเต็มบรรทัด */
     word-break: break-word; /* ป้องกันไม่ให้คำยาวเกินไปหลุดกรอบ */
 }
 
@@ -133,12 +132,5 @@
     to {
         transform: scale(1.09);
     }
-}
-
-
-/* ด้านล่างของ .card */
-.responsive-card {
-    @apply w-full h-full sm:w-[320px] sm:h-auto sm:rounded-lg sm:shadow-xl;
-    border-radius: 0px;
 }
 

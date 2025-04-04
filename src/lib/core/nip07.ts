@@ -14,10 +14,10 @@ export async function getPublicKey(): Promise<string> {
 }
 
 
-export async function signEvent(event: EventTemplate): Promise<NostrEvent> {
-    if (!window.nostr) throw new Error("Nostr extension is not available");
-    return await window.nostr.signEvent(event);
-}
+// export async function signEvent(event: EventTemplate): Promise<{ sig: string }> {
+//     if (!window.nostr) throw new Error("Nostr extension is not available");
+//     return await window.nostr.signEvent(event);
+// }
 
 
 export async function nip44Encrypt(pubkey: string, plaintext: string): Promise<string> {
@@ -30,3 +30,7 @@ export async function nip44Decrypt(pubkey: string, ciphertext: string): Promise<
     if (!window.nostr?.nip44) throw new Error("NIP-44 is not supported");
     return await window.nostr.nip44.decrypt(pubkey, ciphertext);
 }
+
+export const signEvent = async (event) => {
+    return window.nostr?.signEvent(event);
+};
