@@ -1,10 +1,22 @@
-import { useEffect, useState } from "react";
-import NDK, { NDKEvent, NDKNip07Signer, NDKRawEvent } from "@nostr-dev-kit/ndk";
+import {useEffect, useState} from "react";
+import NDK, {NDKEvent, NDKNip07Signer, NDKRawEvent} from "@nostr-dev-kit/ndk";
 import START_ICON from "../assets/btn.png";
+import {signEvent} from "../lib/core/nip07.ts";
+import {OptionCard} from "./OptionCard.tsx";
 
 // สร้าง signer และ ndk
 const nip07signer = new NDKNip07Signer();
-const ndk = new NDK({ signer: nip07signer });
+const ndk = new NDK({signer: nip07signer});
+
+
+const hashEvent = async (eventId) => {
+    const encoder = new TextEncoder();
+    const data = encoder.encode(JSON.stringify(eventId));
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+    const hashArray = Array.from(new Uint8Array(hashBuffer));
+    return hashArray.map((byte) => byte.toString(16).padStart(2, "0")).join("");
+};
+
 
 export const JoinRelay = () => {
 
@@ -30,12 +42,12 @@ export const JoinRelay = () => {
             "wss://relay.siamstr.com/",
         ];
 
-        const ndk = new NDK({ explicitRelayUrls: relaySet });
+        const ndk = new NDK({explicitRelayUrls: relaySet});
         ndk.connect().then(() => console.log("✅ Connected to Relays"));
 
         const sub = ndk.subscribe(
-            { kinds: [10002], authors: [publicKey] },
-            { groupable: false }
+            {kinds: [10002], authors: [publicKey]},
+            {groupable: false}
         );
 
         sub.on("event", (event: NDKEvent) => {
@@ -70,44 +82,59 @@ export const JoinRelay = () => {
             protocol = "ws:";
         }
 
-        //const URL = `${protocol}://${window.location.hostname}/`;
+        //const URL_TARGET = `${protocol}://${window.location.hostname}/`;
         const URL = `ws://localhost:6724/`;
 
 
+        let now = Math.floor(Date.now() / 1000);
+
+
         // ✅ สร้าง NDKEvent ใหม่
-        const ndkEvent = new NDKEvent(ndk);
-        ndkEvent.id = "0";
-        ndkEvent.pubkey = `${publicKey}`;
-        ndkEvent.created_at = Math.floor(Date.now() / 1000);
-        ndkEvent.kind = 10002;  // กำหนดประเภท event
-        ndkEvent.tags = [...firstEvent.tags, ["r", URL]];
-        ndkEvent.content = "";
+        // const ndkEvent = new NDKEvent(ndk);
+        // ndkEvent.id = "0";
+        // ndkEvent.pubkey = `${publicKey}`;
+        // ndkEvent.created_at = Math.floor(Date.now() / 1000);
+        // ndkEvent.kind = 10002;
+        // ndkEvent.tags = [...firstEvent.tags, ["r", URL]];
+        // ndkEvent.content = "";
 
         const daftEvent = {
             id: 0,
             pubkey: `${publicKey}`,
-            created_at: Math.floor(Date.now() / 1000),
+            created_at: now,
             kind: 10002,
             tags: [...firstEvent.tags, ["r", URL]],
             content: ""
         };
 
+        const eventId = await hashEvent(daftEvent);
+        const unsignEvent = {
+            id: eventId,
+            pubkey: `${publicKey}`,
+            created_at: now,
+            kind: 10002,
+            tags: [...firstEvent.tags, ["r", URL]],
+            content: ""
+        }
+
 
         try {
-            const signature = await nip07signer.sign(ndkEvent.rawEvent());
-            ndkEvent.sig = signature;
-            console.log("✍️ Signed Event:", ndkEvent);
 
+            const signedEvent = await signEvent(unsignEvent);
+            console.log("✍️ Signed Event:", signedEvent);
 
-            console.log("✍️ Published Event:", ndkEvent);
+            // const signature = await nip07signer.sign(ndkEvent.rawEvent());
+            // ndkEvent.sig = signature;
+            // console.log("✍️ Signed Event:", ndkEvent);
+
 
             // 🌍 ส่งข้อมูลไปยัง WebSocket
             const ws = new WebSocket(URL);
 
             ws.onopen = () => {
                 console.log("🔗 WebSocket Connected");
-                ws.send(JSON.stringify(["EVENT", ndkEvent]));
-                console.log("📤 Sent Event:", ndkEvent.rawEvent());
+                ws.send(JSON.stringify(["EVENT", signedEvent]));
+                console.log("📤 Sent Event:", signedEvent);
             };
 
             // ws.onmessage = (e) => {
@@ -126,16 +153,31 @@ export const JoinRelay = () => {
         }
     };
 
+    const [showLoginCard, setShowLoginCard] = useState(false);
+
+    const closeLoginCard = () => {
+        setShowLoginCard(false); // ปิด LoginCard
+    };
+
     return (
-        <div className="w-full flex justify-center lg:justify-start">
-            <a>
-                <img
-                    className="mt-[50px] hover:scale-[1.05] active:translate-y-2"
-                    src={START_ICON}
-                    alt="Start"
-                    onClick={start}  // 🎯 กดแล้วเริ่มกระบวนการ
-                />
-            </a>
-        </div>
+        <>
+            <div className="w-full flex justify-center lg:justify-start">
+                <a>
+                    <img
+                        className="mt-[50px] hover:scale-[1.05] active:translate-y-2"
+                        src={START_ICON}
+                        alt="Start"
+                        onClick={() => setShowLoginCard(true)}
+                    />
+                </a>
+            </div>
+
+            {showLoginCard && (
+                <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black/50 z-50">
+                    <OptionCard closeLoginCard={closeLoginCard} />
+                </div>
+            )}
+
+        </>
     );
 };

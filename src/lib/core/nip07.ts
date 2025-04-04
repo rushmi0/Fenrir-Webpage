@@ -1,5 +1,3 @@
-
-/*
 import type {WindowNostr} from "nostr-tools/nip07";
 import {EventTemplate, NostrEvent} from "nostr-tools/core";
 
@@ -32,4 +30,3 @@ export async function nip44Decrypt(pubkey: string, ciphertext: string): Promise<
     if (!window.nostr?.nip44) throw new Error("NIP-44 is not supported");
     return await window.nostr.nip44.decrypt(pubkey, ciphertext);
 }
- */
