@@ -1,4 +1,4 @@
-import loginImg from "../assets/Add.svg";
+import loginImg from "../assets/login.png";
 
 import {
     SET_ACCOUNT,

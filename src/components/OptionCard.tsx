@@ -1,15 +1,18 @@
 import styles from "../styles/OptionCard.module.css";
 import InfoIcon from "../assets/Info.svg";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store";  // Import RootState เพื่อใช้ใน useSelector
+import {useSelector} from "react-redux";
+import {RootState} from "../store";
 
-import { NostrEvent } from "../lib/core/nip01.ts";
-import { getPublicKey, signEvent } from "../lib/core/nip07.ts";
+import {NostrEvent} from "../lib/core/nip01.ts";
+import {signEvent} from "../lib/core/nip07.ts";
+import {URL_TARGET} from "../constants.ts";
 
-export const OptionCard = ({ closeShowCard }: { closeShowCard: () => void }) => {
-    const dispatch = useDispatch();
-    const account = useSelector((state: RootState) => state.account);  // ดึงข้อมูล account จาก store
-    const firstEvent = useSelector((state: RootState) => state.event.firstEvent);  // ดึงข้อมูล firstEvent จาก store
+export const OptionCard = ({closeShowCard}: { closeShowCard: () => void }) => {
+
+    const account = useSelector((state: RootState) => state.account);
+    const firstEvent = useSelector((state: RootState) => state.event.firstEvent);
+    const pool = useSelector((state: RootState) => state.relayPool);
+
 
     const join = async () => {
         if (!account.publicKey) {
@@ -17,29 +20,28 @@ export const OptionCard = ({ closeShowCard }: { closeShowCard: () => void }) => 
             return;
         }
 
-        // สร้าง Nostr Event สำหรับ join
         let daftEvent = await NostrEvent.create({
-            pubkey: account.publicKey,  // ใช้ publicKey จาก account
+            pubkey: account.publicKey,
             created_at: Math.floor(Date.now() / 1000),
             kind: 10002,
             tags: [
                 ...(firstEvent?.tags ?? []),
-                ["r", "ws://localhost:6724/"],
+                ["r", "ws://localhost:6724/", "read", "write"],
                 ["alt", "join Fenrir-s"]
             ],
             content: ""
         });
 
         try {
-            // เซ็นต์ Event
+
+            console.log(pool);
+
             const signedEvent = await signEvent(daftEvent);
 
             console.log("✍️ Signed Event:", signedEvent);
 
-            // ตั้งค่า URL ของ WebSocket
             const URL = `ws://localhost:6724/`;
 
-            // เชื่อมต่อ WebSocket และส่ง Event
             const ws = new WebSocket(URL);
 
             ws.onopen = () => {
@@ -74,7 +76,7 @@ export const OptionCard = ({ closeShowCard }: { closeShowCard: () => void }) => 
 
                 <div className={styles.header}>
                     <div className={styles.image}>
-                        <img src={InfoIcon} alt="Info Icon" width="30rem" />
+                        <img src={InfoIcon} alt="Info Icon" width="30rem"/>
                     </div>
 
                     <div className={styles.content}>

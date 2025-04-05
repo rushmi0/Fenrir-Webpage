@@ -1,12 +1,12 @@
-// src/components/JoinRelay.tsx
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import START_ICON from "../assets/btn.png";
-import { OptionCard } from "./OptionCard";
-import NDK, { NDKEvent, NDKRawEvent } from "@nostr-dev-kit/ndk";
-import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../store";
-import { RELAYS_SET } from "../constants";
-import { setFirstEvent, clearFirstEvent } from "../actions/EventAction";
+import {OptionCard} from "./OptionCard";
+import NDK, {NDKEvent, NDKRawEvent} from "@nostr-dev-kit/ndk";
+import {useDispatch, useSelector} from "react-redux";
+import {RootState} from "../store";
+import {RELAYS_SET, URL_TARGET} from "../constants";
+import {setFirstEvent, clearFirstEvent} from "../actions/EventAction";
+import {setRelayPool} from "../actions/RelayPoolAction.ts";
 
 export const JoinRelay = () => {
     const dispatch = useDispatch();
@@ -18,12 +18,12 @@ export const JoinRelay = () => {
 
         dispatch(clearFirstEvent());
 
-        const ndk = new NDK({ explicitRelayUrls: RELAYS_SET });
+        const ndk = new NDK({explicitRelayUrls: RELAYS_SET});
         ndk.connect().then(() => console.log("✅ Connected to Relays"));
 
         const sub = ndk.subscribe(
-            { kinds: [10002], authors: [account.publicKey] },
-            { groupable: false }
+            {kinds: [10002], authors: [account.publicKey]},
+            {groupable: false}
         );
 
         let highestEvent: NDKRawEvent | null = null;
@@ -40,9 +40,20 @@ export const JoinRelay = () => {
             if (highestEvent) {
                 dispatch(setFirstEvent(highestEvent));
                 console.log("🎯 FirstEvent set to:", highestEvent);
+
+                // ✅ ดึง relay URLs จาก tags
+                const relays: string[] = [
+                    URL_TARGET,
+                    ...highestEvent.tags
+                        .filter((tag) => tag[0] === "r" && typeof tag[1] === "string")
+                        .map((tag) => tag[1])
+                ];
+
+                dispatch(setRelayPool(relays));
+                console.log("📡 RelayPool updated:", relays);
+
             }
 
-            // ✅ ถอด event listeners ออกเพื่อหยุดการทำงาน
             sub.off("event", handleEvent);
             sub.off("eose", handleEose);
         };
@@ -76,7 +87,7 @@ export const JoinRelay = () => {
 
             {showLoginCard && (
                 <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black/50 z-50">
-                    <OptionCard closeShowCard={closeCard} />
+                    <OptionCard closeShowCard={closeCard}/>
                 </div>
             )}
         </>

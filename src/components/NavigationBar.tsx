@@ -3,15 +3,13 @@ import {useDispatch, useSelector} from "react-redux";
 import {setAccount, clearAccount} from "../actions/AccountAction";
 import {RootState} from "../store";
 import defaultProfileImg from "../assets/profile.gif";
-import loginImg from '../assets/Add.svg';
 import NDK, {NDKEvent, NDKNip07Signer} from "@nostr-dev-kit/ndk";
 import {RELAYS_SET} from "../constants.ts";
+import {clearRelayPool} from "../actions/RelayPoolAction.ts";
 
 export const NavigationBar = () => {
     const dispatch = useDispatch();
-    // state.account shape: { publicKey: string | null; name: string; image: string; }
     const account = useSelector((state: RootState) => state.account);
-
     const [isOpen, setIsOpen] = useState(false);
     const toggleDropdown = () => setIsOpen(!isOpen);
 
@@ -37,7 +35,7 @@ export const NavigationBar = () => {
         sub.on("event", (evt: NDKEvent) => {
             const raw = evt.rawEvent();
             let name = "Anonymous";
-            let image = defaultProfileImg || loginImg;
+            let image = defaultProfileImg;
             const parsed = JSON.parse(raw.content);
             if (parsed.name) name = parsed.name;
             if (parsed.image) image = parsed.image;
@@ -52,6 +50,7 @@ export const NavigationBar = () => {
 
     const handleLogout = () => {
         dispatch(clearAccount());
+        dispatch(clearRelayPool());
         setIsOpen(false);
     };
 
