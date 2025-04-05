@@ -1,6 +1,7 @@
 import {LandingPage} from "./pages/LandingPage.tsx";
-import './App.css'
 import {NavigationBar} from "./components/NavigationBar.tsx";
+
+import './App.css'
 
 function App() {
     return (
