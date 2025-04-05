@@ -5,6 +5,7 @@ import {RootState} from "../store";
 import defaultProfileImg from "../assets/profile.gif";
 import loginImg from '../assets/Add.svg';
 import NDK, {NDKEvent, NDKNip07Signer} from "@nostr-dev-kit/ndk";
+import {RELAYS_SET} from "../constants.ts";
 
 export const NavigationBar = () => {
     const dispatch = useDispatch();
@@ -23,14 +24,8 @@ export const NavigationBar = () => {
         }
 
         const pubkey = userMeta.pubkey;
-        const relaySet = [
-            "wss://relay.damus.io/",
-            "wss://relay.notoshi.win/",
-            "wss://nos.lol/",
-            "ws://localhost:6724/"
-        ];
 
-        const ndk = new NDK({explicitRelayUrls: relaySet});
+        const ndk = new NDK({explicitRelayUrls: RELAYS_SET});
         await ndk.connect();
 
         // subscribe to kind 0 (profile)

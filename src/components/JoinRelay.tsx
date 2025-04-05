@@ -1,54 +1,65 @@
-import {useEffect, useState} from "react";
+// src/components/JoinRelay.tsx
+import { useEffect, useState } from "react";
 import START_ICON from "../assets/btn.png";
-import {OptionCard} from "./OptionCard.tsx";
-import NDK, {NDKEvent, NDKRawEvent} from "@nostr-dev-kit/ndk";
-
+import { OptionCard } from "./OptionCard";
+import NDK, { NDKEvent, NDKRawEvent } from "@nostr-dev-kit/ndk";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store";
+import { RELAYS_SET } from "../constants";
+import { setFirstEvent, clearFirstEvent } from "../actions/EventAction";
 
 export const JoinRelay = () => {
-
-    const [publicKey, setPublicKey] = useState<string | null>(null);
-    const [list, setList] = useState<NDKRawEvent[]>([]);
-    const [firstEvent, setFirstEvent] = useState<NDKRawEvent | null>(null);
-
+    const dispatch = useDispatch();
+    const account = useSelector((state: RootState) => state.account);
+    const [showLoginCard, setShowCard] = useState(false);
 
     useEffect(() => {
-        if (!publicKey) return;
+        if (!account.publicKey) return;
 
-        const relaySet = [
-            "wss://relay.damus.io/",
-            "wss://relay.notoshi.win/",
-            "wss://nos.lol/",
-        ];
+        dispatch(clearFirstEvent());
 
-        const ndk = new NDK({explicitRelayUrls: relaySet});
+        const ndk = new NDK({ explicitRelayUrls: RELAYS_SET });
         ndk.connect().then(() => console.log("✅ Connected to Relays"));
 
         const sub = ndk.subscribe(
-            {kinds: [10002], authors: [publicKey]},
-            {groupable: false}
+            { kinds: [10002], authors: [account.publicKey] },
+            { groupable: false }
         );
 
-        sub.on("event", (event: NDKEvent) => {
-            setList(prevList => [...prevList, event.rawEvent()]);
-        });
+        let highestEvent: NDKRawEvent | null = null;
 
-        sub.on("eose", () => console.log("🚀 Subscription EOSED"));
-    }, [publicKey]);
+        const handleEvent = (evt: NDKEvent) => {
+            const raw = evt.rawEvent();
+
+            if (!highestEvent || raw.created_at > highestEvent.created_at) {
+                highestEvent = raw;
+            }
+        };
+
+        const handleEose = () => {
+            if (highestEvent) {
+                dispatch(setFirstEvent(highestEvent));
+                console.log("🎯 FirstEvent set to:", highestEvent);
+            }
+
+            // ✅ ถอด event listeners ออกเพื่อหยุดการทำงาน
+            sub.off("event", handleEvent);
+            sub.off("eose", handleEose);
+        };
+
+        sub.on("event", handleEvent);
+        sub.on("eose", handleEose);
+
+        return () => {
+            // ✅ ถอด event listeners หาก component ถูก unmount
+            sub.off("event", handleEvent);
+            sub.off("eose", handleEose);
+            dispatch(clearFirstEvent());
+        };
+    }, [account.publicKey, dispatch]);
 
 
-    useEffect(() => {
-        if (list.length > 0) {
-            const firstEvent = list[0];
-            setFirstEvent(firstEvent);
-            console.log("🎯 First Event set:", firstEvent);
-        }
-    }, [list]);
-
-
-    const [showLoginCard, setShowCard] = useState(false);
-    const closeCard = () => {
-        setShowCard(false);
-    };
+    const closeCard = () => setShowCard(false);
 
     return (
         <>
@@ -71,4 +82,3 @@ export const JoinRelay = () => {
         </>
     );
 };
-

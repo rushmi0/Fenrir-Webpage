@@ -1,75 +1,67 @@
 import styles from "../styles/OptionCard.module.css";
 import InfoIcon from "../assets/Info.svg";
-import NDK, {NDKEvent, NDKNip07Signer, NDKRawEvent} from "@nostr-dev-kit/ndk";
-import {useEffect, useState} from "react";
-import {NostrEvent} from "../lib/core/nip01.ts";
-import {getPublicKey, signEvent} from "../lib/core/nip07.ts";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../store";  // Import RootState เพื่อใช้ใน useSelector
 
-export const OptionCard = ({closeShowCard}: { closeShowCard: () => void }) => {
+import { NostrEvent } from "../lib/core/nip01.ts";
+import { getPublicKey, signEvent } from "../lib/core/nip07.ts";
 
-    const [publicKey, setPublicKey] = useState<string | null>(null);
+export const OptionCard = ({ closeShowCard }: { closeShowCard: () => void }) => {
+    const dispatch = useDispatch();
+    const account = useSelector((state: RootState) => state.account);  // ดึงข้อมูล account จาก store
+    const firstEvent = useSelector((state: RootState) => state.event.firstEvent);  // ดึงข้อมูล firstEvent จาก store
 
-    const join = () => {
+    const join = async () => {
+        if (!account.publicKey) {
+            console.error("❌ Account public key is missing!");
+            return;
+        }
 
-        const nip07signer = new NDKNip07Signer();
-        nip07signer.user().then(async (user) => {
-            if (user.npub) {
-                setPublicKey(user.pubkey);
-                console.log("🔑 Public Key: ", user.pubkey);
-            } else {
-                console.log("Public key not found");
-            }
+        // สร้าง Nostr Event สำหรับ join
+        let daftEvent = await NostrEvent.create({
+            pubkey: account.publicKey,  // ใช้ publicKey จาก account
+            created_at: Math.floor(Date.now() / 1000),
+            kind: 10002,
+            tags: [
+                ...(firstEvent?.tags ?? []),
+                ["r", "ws://localhost:6724/"],
+                ["alt", "join Fenrir-s"]
+            ],
+            content: ""
+        });
 
-
-            /*
-            let daftEvent = await NostrEvent.create({
-                pubkey: user.pubkey.toString(),
-                created_at: Math.floor(Date.now() / 1000),
-                kind: 10002,
-                tags: [...(firstEvent?.tags ?? []), ["r", "ws://localhost:6724/"], ["alt", "join Fenrir-s"]],
-                content: ""
-            });
-
-            //console.log(`Daft Event: ${JSON.stringify(daftEvent)}`);
+        try {
+            // เซ็นต์ Event
             const signedEvent = await signEvent(daftEvent);
-            //console.log("✍️ Signed Event:", signedEvent);
 
-            let protocol;
-            if (window.location.protocol === "https:") {
-                protocol = "wss:";
-            } else {
-                protocol = "ws:";
-            }
+            console.log("✍️ Signed Event:", signedEvent);
 
-            //const URL_TARGET = `${protocol}://${window.location.hostname}/`;
+            // ตั้งค่า URL ของ WebSocket
             const URL = `ws://localhost:6724/`;
 
-            try {
-                const ws = new WebSocket(URL);
+            // เชื่อมต่อ WebSocket และส่ง Event
+            const ws = new WebSocket(URL);
 
-                ws.onopen = () => {
-                    console.log("🔗 WebSocket Connected");
-                    ws.send(JSON.stringify(["EVENT", signedEvent]));
-                    console.log("📤 Sent Event:", signedEvent);
-                };
+            ws.onopen = () => {
+                console.log("🔗 WebSocket Connected");
+                ws.send(JSON.stringify(["EVENT", signedEvent]));
+                console.log("📤 Sent Event:", signedEvent);
+            };
 
-                ws.onmessage = (e) => {
-                    console.log("📩 Received Message:", e.data);
-                };
+            ws.onmessage = (e) => {
+                console.log("📩 Received Message:", e.data);
+            };
 
-                ws.onerror = (error) => {
-                    console.error("❌ WebSocket Error:", error);
-                };
+            ws.onerror = (error) => {
+                console.error("❌ WebSocket Error:", error);
+            };
 
-                ws.onclose = () => {
-                    console.log("🔌 WebSocket Disconnected");
-                };
-            } catch (error) {
-                console.error("❌ Signing or Publishing Failed:", error);
-            }
-            */
-
-        });
+            ws.onclose = () => {
+                console.log("🔌 WebSocket Disconnected");
+            };
+        } catch (error) {
+            console.error("❌ Signing or Publishing Failed:", error);
+        }
     };
 
     return (
@@ -82,7 +74,7 @@ export const OptionCard = ({closeShowCard}: { closeShowCard: () => void }) => {
 
                 <div className={styles.header}>
                     <div className={styles.image}>
-                        <img src={InfoIcon} alt="Info Icon" width="30rem"/>
+                        <img src={InfoIcon} alt="Info Icon" width="30rem" />
                     </div>
 
                     <div className={styles.content}>
@@ -93,8 +85,12 @@ export const OptionCard = ({closeShowCard}: { closeShowCard: () => void }) => {
                     </div>
 
                     <div className={styles.actions}>
-                        <button className={styles.extension} onClick={join} type="button">Join with extension</button>
-                        <button className={styles.sync} type="button">Sync to back up</button>
+                        <button className={styles.extension} onClick={join} type="button">
+                            Join with extension
+                        </button>
+                        <button className={styles.sync} type="button">
+                            Sync to back up
+                        </button>
                     </div>
                 </div>
             </div>
