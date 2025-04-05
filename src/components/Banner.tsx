@@ -1,4 +1,4 @@
-import imgBanner from "../assets/fenrir.svg";
+import imgBanner from "../assets/fenrir.png";
 import audi from "../assets/dog.mp3";
 import {JoinRelay} from "./JoinRelay.jsx";
 
@@ -17,11 +17,11 @@ export const Banner = () => {
 
                 <div className="flex justify-between items-center pt-[5%] col-lg-12 col-md-12 col-sm-12 flex-col-reverse lg:flex-row-reverse xl:flex-row grid lg:grid-rows-none lg:grid-cols-4 grid-rows-4">
 
-                    <div className="md:col-span-2 md:row-span-4 lg:row-span-2 row-span-4 order-first lg:order-last">
+                    <div className="title md:col-span-2 md:row-span-4 lg:row-span-2 row-span-4 order-first lg:order-last">
                         <div className="lg:relative lg:w-[671px] lg:h-[671px]">
                             <img
                                 onClick={play}
-                                className="title hover:translate-y-3 active:-translate-y-2 inset-0 object-cover"
+                                className="hover:translate-y-3 active:-translate-y-2 inset-0 object-cover"
                                 src={imgBanner}
                                 alt=""
                             />

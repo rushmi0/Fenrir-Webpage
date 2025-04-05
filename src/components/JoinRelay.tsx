@@ -62,14 +62,6 @@ export const JoinRelay = () => {
                         onClick={() => setShowCard(true)}
                     />
                 </a>
-                <a className="detail-btn">
-                    <img
-                        className="mt-[50px] hover:scale-[1.05] active:translate-y-2"
-                        src={LOGIN_ICON}
-                        alt="Login"
-                        onClick={() => setShowCard(true)}
-                    />
-                </a>
             </div>
 
             {showLoginCard && (
