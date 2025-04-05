@@ -1,6 +1,5 @@
 import {useEffect, useState} from "react";
 import START_ICON from "../assets/btn.png";
-import LOGIN_ICON from "../assets/Login.png";
 import {OptionCard} from "./OptionCard.tsx";
 import NDK, {NDKEvent, NDKRawEvent} from "@nostr-dev-kit/ndk";
 
