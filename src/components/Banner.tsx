@@ -32,8 +32,7 @@ export const Banner = () => {
                         <h1 className="title" id={classes.head1}>Fenrir-s</h1>
                         <h2 className="topic" id={classes.subhead1}>Nostr Relay</h2>
                         <p className="des" id={classes.description}>
-                            Fenrir-s is a Nostr Relay implementation in Kotlin, this project
-                            is focused on personal use or for use within a group of friends
+                            Fenrir-s is a Nostr Relay implementation in Kotlin, join us and be part of the freedom!
                         </p>
 
                         {/* Button for join relay*/}

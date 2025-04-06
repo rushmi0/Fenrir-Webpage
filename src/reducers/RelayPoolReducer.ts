@@ -7,7 +7,7 @@ type Action =
 const RelayPoolReducer = (state = initialState, action: Action): string[] => {
     switch (action.type) {
         case "SET_RELAY_POOL":
-            return [...new Set(action.payload)]; // ลบ duplicates ด้วย Set
+            return [...new Set(action.payload)];
         case "CLEAR_RELAY_POOL":
             return [];
         default:
