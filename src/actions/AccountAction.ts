@@ -11,6 +11,7 @@ export interface SetAccountAction {
         about: string;
         banner: string;
         lud16: string;
+        nsec?: string;
     };
 }
 
@@ -28,7 +29,8 @@ export const setAccount = (
     displayName: string,
     about: string,
     banner: string,
-    lud16: string
+    lud16: string,
+    nsec?: string
 ): SetAccountAction => ({
     type: SET_ACCOUNT,
     payload: { publicKey, name, image, displayName, about, banner, lud16 },

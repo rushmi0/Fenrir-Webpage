@@ -12,6 +12,7 @@ interface AccountState {
     about: string;
     banner: string;
     lud16: string;
+    nsec?: string | null;
 }
 
 const initialState: AccountState = {
@@ -22,6 +23,7 @@ const initialState: AccountState = {
     about: '',
     banner: '',
     lud16: '',
+    nsec: null,
 };
 
 export const accountReducer = (
@@ -38,6 +40,7 @@ export const accountReducer = (
                 about: action.payload.about,
                 banner: action.payload.banner,
                 lud16: action.payload.lud16,
+                nsec: action.payload.nsec ?? null,
             };
         case CLEAR_ACCOUNT:
             return initialState;

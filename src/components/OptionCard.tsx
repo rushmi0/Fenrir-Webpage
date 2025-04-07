@@ -6,6 +6,7 @@ import {RootState} from "../store";
 import {NostrEvent} from "../lib/core/nip01.ts";
 import {signEvent} from "../lib/core/nip07.ts";
 import {URL_TARGET} from "../constants.ts";
+import * as React from "react";
 
 export const OptionCard = ({closeShowCard}: { closeShowCard: () => void }) => {
 
@@ -42,11 +43,11 @@ export const OptionCard = ({closeShowCard}: { closeShowCard: () => void }) => {
 
             // Iterate over the pool of WebSocket URLs and send the signedEvent to each one
             pool.forEach(url => {
-                const ws = new WebSocket(url);  // Create WebSocket connection for each relay in the pool
+                const ws = new WebSocket(url);
 
                 ws.onopen = () => {
                     console.log(`🔗 WebSocket Connected to ${url}`);
-                    ws.send(JSON.stringify(["EVENT", signedEvent])); // Send the event to the server
+                    ws.send(JSON.stringify(["EVENT", signedEvent]));
                     console.log("📤 Sent Event:", signedEvent);
                 };
 
@@ -77,7 +78,9 @@ export const OptionCard = ({closeShowCard}: { closeShowCard: () => void }) => {
                 </button>
 
                 <div className={styles.header}>
-                    <div className={styles.image}>
+                    <div className={styles.image}
+                         style={{ "--color-icons": "#e2feee" } as React.CSSProperties}
+                    >
                         <img src={InfoIcon} alt="Info Icon" width="30rem"/>
                     </div>
 

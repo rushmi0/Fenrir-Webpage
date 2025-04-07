@@ -43,12 +43,13 @@
     display: flex;
     margin-left: auto;
     margin-right: auto;
-    background-color: #e2feee;
+    /*background-color: #e2feee;*/
+    background-color: var(--color-icons);
     flex-shrink: 0;
     justify-content: center;
     align-items: center;
-    width: 3rem;
-    height: 3rem;
+    width: 4rem;
+    height: 4rem;
     border-radius: 9999px;
     animation: animate .6s linear alternate-reverse infinite;
     transition: .6s ease;
@@ -57,7 +58,6 @@
 .image svg {
     width: 2rem;
     height: 2rem;
-    background: linear-gradient(45deg, #22BB2E, rgba(34, 187, 46, 0.2));
     -webkit-background-clip: text;
     color: transparent;
 }
@@ -82,8 +82,8 @@
     color: #595b5f;
     font-size: 0.875rem;
     line-height: 1.5rem;
-    text-align: justify; /* ทำให้ข้อความกระจายเต็มบรรทัด */
-    word-break: break-word; /* ป้องกันไม่ให้คำยาวเกินไปหลุดกรอบ */
+    text-align: justify;
+    word-break: break-word;
 }
 
 
