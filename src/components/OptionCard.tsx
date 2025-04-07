@@ -11,8 +11,9 @@ export const OptionCard = ({closeShowCard}: { closeShowCard: () => void }) => {
 
     const account = useSelector((state: RootState) => state.account);
     const firstEvent = useSelector((state: RootState) => state.event.firstEvent);
-    const pool = useSelector((state: RootState) => state.relayPool);
+    const pool: string[] = useSelector((state: RootState) => state.relayPool);
 
+    const URL = `ws://localhost:6724/`;
 
     const join = async () => {
         if (!account.publicKey) {
@@ -26,45 +27,46 @@ export const OptionCard = ({closeShowCard}: { closeShowCard: () => void }) => {
             kind: 10002,
             tags: [
                 ...(firstEvent?.tags ?? []),
-                ["r", "ws://localhost:6724/", "read", "write"],
+                ["r", URL_TARGET, "read", "write"],
                 ["alt", "join Fenrir-s"]
             ],
             content: ""
         });
 
         try {
-
             console.log(pool);
 
             const signedEvent = await signEvent(daftEvent);
 
             console.log("✍️ Signed Event:", signedEvent);
 
-            const URL = `ws://localhost:6724/`;
+            // Iterate over the pool of WebSocket URLs and send the signedEvent to each one
+            pool.forEach(url => {
+                const ws = new WebSocket(url);  // Create WebSocket connection for each relay in the pool
 
-            const ws = new WebSocket(URL);
+                ws.onopen = () => {
+                    console.log(`🔗 WebSocket Connected to ${url}`);
+                    ws.send(JSON.stringify(["EVENT", signedEvent])); // Send the event to the server
+                    console.log("📤 Sent Event:", signedEvent);
+                };
 
-            ws.onopen = () => {
-                console.log("🔗 WebSocket Connected");
-                ws.send(JSON.stringify(["EVENT", signedEvent]));
-                console.log("📤 Sent Event:", signedEvent);
-            };
+                ws.onmessage = (e) => {
+                    console.log(`📩 Received Message from ${url}:`, e.data);
+                };
 
-            ws.onmessage = (e) => {
-                console.log("📩 Received Message:", e.data);
-            };
+                ws.onerror = (error) => {
+                    console.error(`❌ WebSocket Error on ${url}:`, error);
+                };
 
-            ws.onerror = (error) => {
-                console.error("❌ WebSocket Error:", error);
-            };
-
-            ws.onclose = () => {
-                console.log("🔌 WebSocket Disconnected");
-            };
+                ws.onclose = () => {
+                    console.log(`🔌 WebSocket Disconnected from ${url}`);
+                };
+            });
         } catch (error) {
             console.error("❌ Signing or Publishing Failed:", error);
         }
     };
+
 
     return (
         <>

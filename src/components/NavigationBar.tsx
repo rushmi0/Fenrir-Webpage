@@ -8,6 +8,7 @@ import {clearRelayPool} from "../actions/RelayPoolAction.ts";
 
 import CLOSE_IMG from "../assets/close.png";
 import MENU_IMG from "../assets/menu.svg";
+import LOGO from "../assets/fenrir.png";
 
 
 export const NavigationBar = () => {
@@ -41,10 +42,16 @@ export const NavigationBar = () => {
         sub.on("eose", () => {
             if (highestEvent) {
                 const parsed = JSON.parse(highestEvent.content);
+                console.log(parsed);
                 const name = parsed.name || "Anonymous";
+                const displayName = parsed.display_name || "";
+                const about = parsed.about || "";
                 const image = parsed.picture || "";
-                dispatch(setAccount(pubkey, name, image));
-                console.log("👤 Updated Profile:", {name, image});
+                const banner = parsed.banner || "";
+                const lud16 = parsed.lud16 || "";
+
+                dispatch(setAccount(pubkey, name, image, displayName, about, banner, lud16));
+                console.log("👤 Updated Profile:", { name, displayName, about, image, banner, lud16 });
             }
             console.log("✅ Profile fetch completed");
         });
@@ -57,14 +64,18 @@ export const NavigationBar = () => {
     };
 
     return (
-        <nav className="fixed top-4 left-4 right-4 z-50 flex items-center justify-between px-6 py-3 xs:py-0.5 bg-white/30 backdrop-blur-lg shadow-md rounded-2xl">
+        <nav
+            className="fixed top-4 left-4 right-4 z-50 flex items-center justify-between px-6 py-3 xs:py-0.5 bg-white/30 backdrop-blur-lg shadow-md rounded-2xl">
             {/* Left - Logo & Menu */}
             <div className="flex items-center space-x-6">
-                <img src="/src/assets/fenrir.png" alt="Fenrir Logo" width="50" className="h-auto"/>
+                <img src={LOGO} alt="Fenrir Logo" width="50" className="h-auto"/>
                 <div className="hidden ms:flex space-x-4 text-gray-700">
-                    <a href="#" className="text-xs xs:text-[10px] sm:text-[12px] md:text-[15px] hover:text-[#935CD1]">Home</a>
-                    <a href="#" className="text-xs xs:text-[10px] sm:text-[12px] md:text-[15px] hover:text-[#935CD1]">Relay Operator</a>
-                    <a href="#" className="text-xs xs:text-[10px] sm:text-[12px] md:text-[15px] hover:text-[#935CD1]">About Us</a>
+                    <a href="#"
+                       className="text-xs xs:text-[10px] sm:text-[12px] md:text-[15px] hover:text-[#935CD1]">Home</a>
+                    <a href="#" className="text-xs xs:text-[10px] sm:text-[12px] md:text-[15px] hover:text-[#935CD1]">Relay
+                        Operator</a>
+                    <a href="#" className="text-xs xs:text-[10px] sm:text-[12px] md:text-[15px] hover:text-[#935CD1]">About
+                        Us</a>
                 </div>
             </div>
 
@@ -73,8 +84,9 @@ export const NavigationBar = () => {
                 {account.publicKey ? (
                     <>
                         {/* Profile Image */}
-                        <div className="w-8 xs:w-6 h-8 xs:h-6 rounded-[8px] overflow-hidden border border-gray-300 cursor-pointer"
-                             onClick={toggleDropdown}>
+                        <div
+                            className="w-10 xs:w-6 h-10 xs:h-6 rounded-[8px] overflow-hidden border border-gray-300 cursor-pointer"
+                            onClick={toggleDropdown}>
                             <img
                                 src={account.image}
                                 alt="Profile"
@@ -123,13 +135,13 @@ export const NavigationBar = () => {
                                    className="block px-4 py-2 hover:bg-gray-100 hover:text-[#935CD1]">Sync to Back
                                     Up</a>
                                 <a href="#"
-                                   className="block px-4 py-2 hover:bg-gray-100 hover:text-[#935CD1]">Profile</a>
+                                   className="text-xs sm:text-[10px] md:text-sm block px-4 py-2 hover:bg-gray-100 hover:text-[#935CD1]">Profile</a>
                                 <a href="#"
-                                   className="block px-4 py-2 hover:bg-gray-100 hover:text-[#935CD1]">Settings</a>
+                                   className="text-xs sm:text-[10px] md:text-sm block px-4 py-2 hover:bg-gray-100 hover:text-[#935CD1]">Settings</a>
                                 <a
                                     href="#"
                                     onClick={handleLogout}
-                                    className="block px-4 py-2 hover:bg-gray-100 hover:text-[#935CD1]"
+                                    className="text-xs sm:text-[10px] md:text-sm block px-4 py-2 hover:bg-gray-100 hover:text-[#935CD1]"
                                 >
                                     Logout
                                 </a>
@@ -137,21 +149,22 @@ export const NavigationBar = () => {
                         ) : (
                             <>
                                 <a href="#"
-                                   className="block px-4 py-2 hover:bg-gray-100 hover:text-[#935CD1]">Join Relay</a>
+                                   className="text-xs sm:text-[10px] md:text-sm block px-4 py-2 hover:bg-gray-100 hover:text-[#935CD1]">Join Relay</a>
                                 <a href="#"
-                                   className="block px-4 py-2 hover:bg-gray-100 hover:text-[#935CD1]">Sync to Back Up</a>
+                                   className="text-xs sm:text-[10px] md:text-sm block px-4 py-2 hover:bg-gray-100 hover:text-[#935CD1]">Sync to Back
+                                    Up</a>
                             </>
                         )}
 
                         <div className="ms:hidden border-t mt-2">
-                            <a href="#" className="block px-4 py-2 hover:bg-gray-100 hover:text-[#935CD1]">Home</a>
-                            <a href="#" className="block px-4 py-2 hover:bg-gray-100 hover:text-[#935CD1]">Relay Operator</a>
-                            <a href="#" className="block px-4 py-2 hover:bg-gray-100 hover:text-[#935CD1]">About Us</a>
+                            <a href="#" className="text-xs sm:text-[10px] md:text-sm block px-4 py-2 hover:bg-gray-100 hover:text-[#935CD1]">Home</a>
+                            <a href="#" className="text-xs sm:text-[10px] md:text-sm block px-4 py-2 hover:bg-gray-100 hover:text-[#935CD1]">Relay
+                                Operator</a>
+                            <a href="#" className="text-xs sm:text-[10px] md:text-sm block px-4 py-2 hover:bg-gray-100 hover:text-[#935CD1]">About Us</a>
                         </div>
                     </div>
                 )}
             </div>
         </nav>
-
     );
 };
