@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import {useState, useEffect} from 'react';
 
 const truncateText = (text: string, maxLength: number) => {
     if (text.length > maxLength) {
-        const start = text.substring(0, 10);
-        const end = text.substring(text.length - 10);
-        return `${start}.....${end}`;
+        const start = text.substring(0, 8);
+        const end = text.substring(text.length - 8);
+        return `${start}...${end}`;
     }
     return text;
 };
@@ -17,6 +17,8 @@ export const RelayOperator = () => {
     const protocol = window.location.protocol.includes("https") ? "https" : "http";
     const endpoint = `${protocol}://${window.location.hostname}:6724/`;
     console.log(endpoint);
+
+    const name = "Lnwza007"
 
     useEffect(() => {
         fetch(endpoint, {
@@ -45,10 +47,13 @@ export const RelayOperator = () => {
         <>
             <div id="relay-operator" className="mt-20 mb-10 flex flex-col items-center px-4">
                 {/* Title */}
-                <p className="text-xl sm:text-lg md:text-base font-bold mb-7 text-center text-gray-600">Relay Operator</p>
+                <p className="text-xl sm:text-lg md:text-base font-bold mb-7 text-center text-gray-600">Relay
+                    Operator</p>
 
                 {/* Card */}
-                <div className="w-full max-w-sm sm:max-w-md lg:max-w-5xl flex flex-col lg:flex-row bg-white shadow-lg rounded-xl overflow-hidden">
+                <div
+                    className="w-full max-w-sm sm:max-w-ms lg:max-w-[50rem] flex flex-col lg:flex-row bg-white shadow-lg rounded-xl overflow-hidden">
+
                     {/* Profile Image */}
                     <div className="w-full lg:w-1/2">
                         <img
@@ -60,17 +65,18 @@ export const RelayOperator = () => {
 
                     {/* Card Content */}
                     <div className="w-full lg:w-1/2 px-6 py-6">
-                        <h2 className="text-lg sm:text-base md:text-sm font-semibold text-gray-800">Headline</h2>
-                        <h3 className="mt-1 mb-4 text-sm sm:text-xs md:text-[10px] text-gray-500 flex items-center">
+                        <h2 className="text-lg sm:text-base md:text-sm font-semibold text-gray-800">{name}</h2>
+                        <div className="mt-1 mb-4 text-sm sm:text-xs md:text-[10px] text-gray-500 flex items-center">
                             {truncateText(longText, 50)}
                             <button
                                 onClick={handleCopy}
-                                className="text-[9px] ml-2 text-[#935CD1]"
+                                className="text-[12px] ml-2 text-[#935CD1]  px-1 rounded-md transition-all"
                                 aria-label="Copy to clipboard"
                             >
                                 {copied ? 'Copied!' : 'Copy'}
                             </button>
-                        </h3>
+                        </div>
+
                         <p className="text-sm sm:text-xs md:text-[10px] text-gray-600 mb-4">
                             Please add your content here. Keep it short and simple. And smile :)
                         </p>
