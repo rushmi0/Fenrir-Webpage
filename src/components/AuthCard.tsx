@@ -85,9 +85,10 @@ export const AuthCard = ({ onClose }: { onClose: () => void }) => {
                 onClick={onClose}
             >
                 <div
-                    className="relative md:h-[27rem] xs:h-[25rem] md:max-w-md bg-white rounded-lg shadow-lg m-6 md:m-0 mt-40 md:mt-0"
+                    className="relative md:h-[27rem] xs:h-[25rem] md:max-w-[26rem] ms:max-w-[25rem] bg-white rounded-lg shadow-lg m-6 md:m-0 mt-40 md:mt-0"
                     onClick={(e) => e.stopPropagation()}
                 >
+
 
                 <button className={styles.dismiss} type="button" onClick={onClose}>
                         <p>×</p>

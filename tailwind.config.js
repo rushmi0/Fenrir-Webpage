@@ -19,6 +19,7 @@ export default {
         '30': '30deg',
       },
       backgroundImage: {
+        'box-label': "url(assets/svg_pixel.svg)",
         'bg-mobile': "url(assets/bg.svg)",
         'bg-pc': "url(assets/bgpc.svg)",
       }

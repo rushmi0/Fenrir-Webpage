@@ -1,6 +1,6 @@
 const protocol = window.location.protocol === "https:" ? "wss:" : "ws:";
 
-export const URL_TARGET: string = `${protocol}://${window.location.hostname}/`;
+export const URL_TARGET: string = `${protocol}://${window.location.hostname}`;
 
 
 export const RELAYS_SET = [

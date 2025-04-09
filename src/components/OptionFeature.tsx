@@ -1,15 +1,15 @@
 import styles from "../styles/OptionCard.module.css";
 import InfoIcon from "../assets/Info.svg";
-import {useSelector} from "react-redux";
-import {RootState} from "../store";
-
-import {NostrEvent} from "../lib/core/nip01.ts";
-import {signEvent} from "../lib/core/nip07.ts";
-import {URL_TARGET} from "../constants.ts";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "../store";
+import { setShowAuthCard } from "../actions/AuthCardActions.ts";
 import * as React from "react";
+import {NostrEvent} from "../lib/core/nip01.ts";
+import {URL_TARGET} from "../constants.ts";
+import {signEvent} from "../lib/core/nip07.ts";
 
-export const OptionCard = ({closeShowCard}: { closeShowCard: () => void }) => {
-
+export const OptionFeature = ({ closeShowCard }: { closeShowCard: () => void }) => {
+    const dispatch = useDispatch();
     const account = useSelector((state: RootState) => state.account);
     const firstEvent = useSelector((state: RootState) => state.event.firstEvent);
     const pool: string[] = useSelector((state: RootState) => state.relayPool);
@@ -18,7 +18,9 @@ export const OptionCard = ({closeShowCard}: { closeShowCard: () => void }) => {
 
     const join = async () => {
         if (!account.publicKey) {
-            console.error("❌ Account public key is missing!");
+            console.log("User is not logged in.");
+            closeShowCard();
+            dispatch(setShowAuthCard(true));
             return;
         }
 
@@ -41,7 +43,7 @@ export const OptionCard = ({closeShowCard}: { closeShowCard: () => void }) => {
 
             console.log("✍️ Signed Event:", signedEvent);
 
-            // Iterate over the pool of WebSocket URLs and send the signedEvent to each one
+
             pool.forEach(url => {
                 const ws = new WebSocket(url);
 
@@ -68,7 +70,6 @@ export const OptionCard = ({closeShowCard}: { closeShowCard: () => void }) => {
         }
     };
 
-
     return (
         <>
             <div
@@ -93,7 +94,7 @@ export const OptionCard = ({closeShowCard}: { closeShowCard: () => void }) => {
 
                     <div className={styles.actions}>
                         <button className={styles.extension} onClick={join} type="button">
-                            Join with extension
+                            Join now
                         </button>
                         <button className={styles.sync} type="button">
                             Sync to back up

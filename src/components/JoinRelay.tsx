@@ -1,6 +1,6 @@
 import {useEffect, useState} from "react";
 import START_ICON from "../assets/btn.png";
-import {OptionCard} from "./OptionCard";
+import {OptionFeature} from "./OptionFeature.tsx";
 import NDK, {NDKEvent, NDKRawEvent} from "@nostr-dev-kit/ndk";
 import {useDispatch, useSelector} from "react-redux";
 import {RootState} from "../store";
@@ -41,7 +41,6 @@ export const JoinRelay = () => {
                 dispatch(setFirstEvent(highestEvent));
                 console.log("🎯 FirstEvent set to:", highestEvent);
 
-                // ✅ ดึง relay URLs จาก tags
                 const relays: string[] = [
                     URL_TARGET,
                     ...highestEvent.tags
@@ -62,7 +61,6 @@ export const JoinRelay = () => {
         sub.on("eose", handleEose);
 
         return () => {
-            // ✅ ถอด event listeners หาก component ถูก unmount
             sub.off("event", handleEvent);
             sub.off("eose", handleEose);
             dispatch(clearFirstEvent());
@@ -87,7 +85,7 @@ export const JoinRelay = () => {
 
             {showLoginCard && (
                 <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black/50 z-50">
-                    <OptionCard closeShowCard={closeCard}/>
+                    <OptionFeature closeShowCard={closeCard}/>
                 </div>
             )}
         </>
