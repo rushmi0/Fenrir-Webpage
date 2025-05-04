@@ -14,7 +14,7 @@ export const OptionFeature = ({ closeShowCard }: { closeShowCard: () => void }) 
     const firstEvent = useSelector((state: RootState) => state.event.firstEvent);
     const pool: string[] = useSelector((state: RootState) => state.relayPool);
 
-    const URL = `ws://localhost:6724/`;
+    //const URL = `ws://localhost:6724/`;
 
     const join = async () => {
         if (!account.publicKey) {

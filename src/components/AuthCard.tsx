@@ -8,9 +8,11 @@ import { useState } from "react";
 import * as React from "react";
 import { Toast } from "./Toast";
 import {setShowAuthCard} from "../actions/AuthCardActions.ts";
+import {AppDispatch} from "../store.ts";
 
 export const AuthCard = ({ onClose }: { onClose: () => void }) => {
-    const dispatch = useDispatch();
+    const dispatch = useDispatch<AppDispatch>();
+
     const [nsec, setNsec] = useState("");
     const [toast, setToast] = useState<{ message: string; type?: "error" | "success" } | null>(null);
 

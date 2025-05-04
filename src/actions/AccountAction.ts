@@ -33,7 +33,7 @@ export const setAccount = (
     nsec?: string
 ): SetAccountAction => ({
     type: SET_ACCOUNT,
-    payload: { publicKey, name, image, displayName, about, banner, lud16 },
+    payload: { publicKey, name, image, displayName, about, banner, lud16, nsec },
 });
 
 // Action Creator สำหรับ CLEAR_ACCOUNT
