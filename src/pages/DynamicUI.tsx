@@ -4,7 +4,7 @@ import * as React from "react";
 
 type NativeModule = (ctx: QuickJSContext) => void;
 
-function registerConsoleModule(ctx: QuickJSContext) {
+function registerModule(ctx: QuickJSContext) {
     const makeMethod = (method: keyof Console) =>
         ctx.newFunction(method, (...args) => {
             const values = args.map((h) => {
@@ -34,7 +34,7 @@ function registerConsoleModule(ctx: QuickJSContext) {
     consoleObj.dispose();
 }
 
-const nativeModules: NativeModule[] = [registerConsoleModule];
+const nativeModules: NativeModule[] = [registerModule];
 
 
 type BaseNode = {
@@ -262,10 +262,6 @@ const blueprint = JSON.stringify({
       }
     `,
 });
-
-/* ============================================================
-   6️⃣ Entry
-============================================================ */
 
 export const DynamicUI = () => {
     return <RenderUI blueprint={blueprint} />;
