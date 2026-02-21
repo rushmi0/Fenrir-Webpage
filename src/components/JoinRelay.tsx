@@ -1,93 +1,136 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
+import NDK, { NDKEvent, NDKNip07Signer, NDKRawEvent } from "@nostr-dev-kit/ndk";
 import START_ICON from "../assets/btn.png";
-import {OptionFeature} from "./OptionFeature.tsx";
-import NDK, {NDKEvent, NDKRawEvent} from "@nostr-dev-kit/ndk";
-import {useDispatch, useSelector} from "react-redux";
-import {RootState} from "../store";
-import {RELAYS_SET, URL_TARGET} from "../constants";
-import {setFirstEvent, clearFirstEvent} from "../actions/EventAction";
-import {setRelayPool} from "../actions/RelayPoolAction.ts";
+
+const nip07signer = new NDKNip07Signer();
+const ndk = new NDK({ signer: nip07signer });
 
 export const JoinRelay = () => {
-    const dispatch = useDispatch();
-    const account = useSelector((state: RootState) => state.account);
-    const [showLoginCard, setShowCard] = useState(false);
+
+    const [list, setList] = useState<NDKRawEvent[]>([]);
+    const [firstEvent, setFirstEvent] = useState<NDKRawEvent | null>(null);
+    const [publicKey, setPublicKey] = useState<string | null>(null);
+
+    nip07signer.user().then(async (user) => {
+        if (user.npub) {
+            setPublicKey(user.pubkey);
+            console.log("🔑 Public Key: ", user.pubkey);
+        }
+    });
+
 
     useEffect(() => {
-        if (!account.publicKey) return;
+        if (!publicKey) return;
 
-        dispatch(clearFirstEvent());
+        const relaySet = [
+            "wss://relay.damus.io/",
+            "wss://relay.notoshi.win/",
+            "wss://nos.lol/",
+            "wss://relay.siamstr.com/",
+        ];
 
-        const ndk = new NDK({explicitRelayUrls: RELAYS_SET});
+        const ndk = new NDK({ explicitRelayUrls: relaySet });
         ndk.connect().then(() => console.log("✅ Connected to Relays"));
 
         const sub = ndk.subscribe(
-            {kinds: [10002], authors: [account.publicKey]},
-            {groupable: false}
+            { kinds: [10002], authors: [publicKey] },
+            { groupable: false }
         );
 
-        let highestEvent: NDKRawEvent | null = null;
+        sub.on("event", (event: NDKEvent) => {
+            setList(prevList => [...prevList, event.rawEvent()]);
+        });
 
-        const handleEvent = (evt: NDKEvent) => {
-            const raw = evt.rawEvent();
+        sub.on("eose", () => console.log("🚀 Subscription EOSED"));
+    }, [publicKey]);
 
-            if (!highestEvent || raw.created_at > highestEvent.created_at) {
-                highestEvent = raw;
-            }
+    useEffect(() => {
+        if (list.length > 0) {
+            const firstEvent = list[0];
+            setFirstEvent(firstEvent);
+            console.log("🎯 First Event set:", firstEvent);
+        }
+    }, [list]);
+
+    const start = async () => {
+        if (!firstEvent) {
+            return;
+        }
+
+        console.log("🎯 First Event:", firstEvent);
+
+/*        let protocol;
+        if (window.location.protocol === "https:") {
+            protocol = "wss:";
+        } else {
+            protocol = "ws:";
+        }*/
+
+        //const URL = `${protocol}://${window.location.hostname}/`;
+        const URL = `ws://localhost:6724/`;
+
+
+        const ndkEvent = new NDKEvent(ndk);
+        ndkEvent.id = "0";
+        ndkEvent.pubkey = `${publicKey}`;
+        ndkEvent.created_at = Math.floor(Date.now() / 1000);
+        ndkEvent.kind = 10002;  // กำหนดประเภท event
+        ndkEvent.tags = [...firstEvent.tags, ["r", URL]];
+        ndkEvent.content = "";
+
+        const daftEvent = {
+            id: 0,
+            pubkey: `${publicKey}`,
+            created_at: Math.floor(Date.now() / 1000),
+            kind: 10002,
+            tags: [...firstEvent.tags, ["r", URL]],
+            content: ""
         };
+        console.log(daftEvent);
 
-        const handleEose = () => {
-            if (highestEvent) {
-                dispatch(setFirstEvent(highestEvent));
-                console.log("🎯 FirstEvent set to:", highestEvent);
-
-                const relays: string[] = [
-                    URL_TARGET,
-                    ...highestEvent.tags
-                        .filter((tag) => tag[0] === "r" && typeof tag[1] === "string")
-                        .map((tag) => tag[1])
-                ];
-
-                dispatch(setRelayPool(relays));
-                console.log("📡 RelayPool updated:", relays);
-
-            }
-
-            sub.off("event", handleEvent);
-            sub.off("eose", handleEose);
-        };
-
-        sub.on("event", handleEvent);
-        sub.on("eose", handleEose);
-
-        return () => {
-            sub.off("event", handleEvent);
-            sub.off("eose", handleEose);
-            dispatch(clearFirstEvent());
-        };
-    }, [account.publicKey, dispatch]);
+        try {
+            const signature = await nip07signer.sign(ndkEvent.rawEvent());
+            ndkEvent.sig = signature;
+            console.log("✍️ Signed Event:", ndkEvent);
 
 
-    const closeCard = () => setShowCard(false);
+            console.log("✍️ Published Event:", ndkEvent);
+
+            // 🌍 ส่งข้อมูลไปยัง WebSocket
+            const ws = new WebSocket(URL);
+
+            ws.onopen = () => {
+                console.log("🔗 WebSocket Connected");
+                ws.send(JSON.stringify(["EVENT", ndkEvent]));
+                console.log("📤 Sent Event:", ndkEvent.rawEvent());
+            };
+
+            // ws.onmessage = (e) => {
+            //
+            // }
+
+            ws.onerror = (error) => {
+                console.error("❌ WebSocket Error:", error);
+            };
+
+            ws.onclose = () => {
+                console.log("🔌 WebSocket Disconnected");
+            };
+        } catch (error) {
+            console.error("❌ Signing or Publishing Failed:", error);
+        }
+    };
 
     return (
-        <>
-            <div className="detail w-full flex justify-center lg:justify-start space-x-4">
-                <a className="detail-btn">
-                    <img
-                        className="mt-[50px] hover:scale-[1.05] active:translate-y-2"
-                        src={START_ICON}
-                        alt="Start"
-                        onClick={() => setShowCard(true)}
-                    />
-                </a>
-            </div>
-
-            {showLoginCard && (
-                <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center bg-black/50 z-50">
-                    <OptionFeature closeShowCard={closeCard}/>
-                </div>
-            )}
-        </>
+        <div className="w-full flex justify-center lg:justify-start">
+            <a>
+                <img
+                    className="mt-[50px] hover:scale-[1.05] active:translate-y-2"
+                    src={START_ICON}
+                    alt="Start"
+                    onClick={start}
+                />
+            </a>
+        </div>
     );
 };

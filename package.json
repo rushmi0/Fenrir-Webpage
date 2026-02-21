@@ -10,13 +10,12 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@aws-crypto/sha256-browser": "^5.2.0",
     "@nostr-dev-kit/ndk": "^2.13.0",
     "nostr-tools": "^2.11.1",
+    "quickjs-emscripten": "^0.32.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "react-redux": "^9.2.0",
-    "redux": "^5.0.1"
+    "react-router-dom": "^7.13.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",

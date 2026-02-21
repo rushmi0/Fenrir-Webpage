@@ -2,8 +2,9 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @font-face {
-  font-family: 'MinecraftStandard';
-  src: url('./fonts/MinecraftStandard.otf') format('opentype');
+    font-family: "JetBrainsMono";
+    src:
+        local("JetBrainsMonoNL-Regular"),
+        url("./src/fonts/JetBrainsMonoNL-Regular.ttf");
 }

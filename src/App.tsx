@@ -1,14 +1,14 @@
-import {LandingPage} from "./pages/LandingPage.tsx";
-import {NavigationBar} from "./components/NavigationBar.tsx";
-
+import { Routes, Route } from "react-router-dom"
+import { LandingPage } from "./pages/LandingPage"
 import './App.css'
+import { DynamicUI } from "./pages/DynamicUI"
 
 function App() {
     return (
-        <>
-            <NavigationBar/>
-            <LandingPage/>
-        </>
+        <Routes>
+            <Route path="/" element={<LandingPage />} />
+            <Route path="/customui" element={<DynamicUI />} />
+        </Routes>
     )
 }
 

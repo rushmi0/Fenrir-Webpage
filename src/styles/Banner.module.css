@@ -1,11 +1,10 @@
 #head1 {
-    @apply text-[36px] sm:text-[48px] md:text-[56px] lg:text-[64px] font-bold text-[#935CD1];
+    @apply lg:text-[96px] font-bold text-[#935CD1] text-[48px] sm:text-[48px]
 }
-
 #subhead1 {
-    @apply mt-5 text-[30px] sm:text-[30px] md:text-[40px] lg:text-[48px] font-bold;
+    @apply lg:text-[96px] font-bold text-[48px] sm:text-[48px]
 }
 
 #description {
-    @apply mt-7 text-[13px] sm:text-[18px] md:text-[22px] lg:text-[24px] leading-relaxed;
+    @apply mt-10 lg:text-[30px] text-[21px] sm:text-[21px] text-balance leading-normal
 }
