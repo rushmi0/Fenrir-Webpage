@@ -76,7 +76,7 @@ export const SlideShow = () => {
                   </div>
 
                   <a
-                      className="text-[21px] mb-1 leading-none hover:text-[#935cd1] transition"
+                    className="text-[21px] mb-1 leading-none hover:text-[#935cd1] transition"
                     href={item.link}
                     target="_blank"
                     rel="noopener noreferrer"

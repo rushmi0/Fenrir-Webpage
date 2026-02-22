@@ -1,9 +1,9 @@
-import imgBanner from "../assets/fenrir.svg";
+import imgBanner from "../assets/fenrir_pixel_art_v2-bg-remove.png";
 import audi from "../assets/dog.mp3";
-//import { JoinRelay } from "./JoinRelay";
 import { useNavigate } from "react-router-dom";
 
 import classes from "../styles/Banner.module.css";
+import START_ICON from "../assets/btn.png";
 
 export const Banner = () => {
   const navigate = useNavigate();
@@ -27,16 +27,18 @@ export const Banner = () => {
             focused on personal use or for use within a group of friends
           </p>
 
-          {/* Button for join relay*/}
-          {/*<JoinRelay />*/}
-
           {/* New Screen Button */}
-          <button
-            onClick={() => navigate("/customui")}
-            className="mt-4 px-6 py-2 bg-black text-white rounded-lg hover:bg-gray-800 transition"
-          >
-            New Screen
-          </button>
+          <div className="w-full flex justify-center lg:justify-start">
+            <a>
+              <img
+                  className="mt-[50px] hover:scale-[1.05] active:translate-y-2"
+                  src={START_ICON}
+                  alt="Start"
+                  onClick={() => navigate("/customui")}
+              />
+            </a>
+          </div>
+
         </div>
 
         {/* Right Section */}
