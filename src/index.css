@@ -4,7 +4,7 @@
 
 @font-face {
     font-family: "JetBrainsMono";
-    src:
-        local("JetBrainsMonoNL-Regular"),
-        url("./src/fonts/JetBrainsMonoNL-Regular.ttf");
+    src: url("./fonts/JetBrainsMonoNL-Regular.ttf") format("truetype");
+    font-weight: normal;
+    font-style: normal;
 }

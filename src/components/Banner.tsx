@@ -22,23 +22,23 @@ export const Banner = () => {
           <h1 id={classes.head1}>Fenrir-s</h1>
           <h2 id={classes.subhead1}>Nostr Relay</h2>
 
-          <p id={classes.description}>
-            Fenrir-s is a Nostr Relay implementation in Kotlin, this project is
-            focused on personal use or for use within a group of friends
+          <p id={classes.description} className="mt-6 leading-relaxed">
+            A lightweight Nostr relay
+            <br />
+            Run your own relay Own your data
           </p>
 
           {/* New Screen Button */}
           <div className="w-full flex justify-center lg:justify-start">
             <a>
               <img
-                  className="mt-[50px] hover:scale-[1.05] active:translate-y-2"
-                  src={START_ICON}
-                  alt="Start"
-                  onClick={() => navigate("/customui")}
+                className="mt-[50px] hover:scale-[1.05] active:translate-y-2"
+                src={START_ICON}
+                alt="Start"
+                onClick={() => navigate("/customui")}
               />
             </a>
           </div>
-
         </div>
 
         {/* Right Section */}
@@ -48,7 +48,7 @@ export const Banner = () => {
               onClick={play}
               className="hover:translate-y-3 active:-translate-y-2 inset-0 object-cover cursor-pointer transition"
               src={imgBanner}
-              alt="Fenrir"
+              alt="Fenrir-s"
             />
           </div>
         </div>
