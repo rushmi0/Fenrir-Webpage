@@ -1,8 +1,23 @@
+:root {
+    --bg: #ebebeb;
+    --purple: #935cd1;
+    --purple-light: #c4b5fd;
+    --purple-border: #a78bfa;
+    --text: #1a1a1a;
+    --text-muted: #6b7280;
+    --white: #f4f4f4;
+}
 
 body {
-    background-color: #f4f4f4;
-    font-family: "JetBrainsMono", sans-serif;
-    overflow-x: hidden;
+    background: var(--bg);
+    color: var(--text);
+    font-family: "IBM Plex Sans", sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
 }
 
 .hoverScale {

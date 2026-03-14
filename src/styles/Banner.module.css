@@ -1,10 +1,144 @@
+.leftSection {
+    animation: fadeUp 0.6s ease both;
+}
+
+.leftSection #head1 {
+    animation: fadeUp 0.6s 0.05s ease both;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+.leftSection #subhead1 {
+    animation: fadeUp 0.6s 0.15s ease both;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+.leftSection #description {
+    animation: fadeUp 0.6s 0.25s ease both;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+.btnGroup {
+    animation: fadeUp 0.6s 0.35s ease both;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+.rightSection {
+    animation: fadeIn 0.8s 0.1s ease both;
+    opacity: 0;
+    animation-fill-mode: forwards;
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* === Headings === */
 #head1 {
     @apply lg:text-[96px] font-bold text-[#935CD1] text-[48px] sm:text-[48px];
+    font-family: "Space Mono", monospace;
 }
+
 #subhead1 {
     @apply lg:text-[96px] font-bold text-[48px] sm:text-[48px];
+    font-family: "Space Mono", monospace;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1;
 }
 
 #description {
     @apply mt-10 lg:text-[30px] text-[21px] sm:text-[21px] text-balance leading-normal;
+    font-family: "Space Mono", monospace;
+    color: var(--text-muted);
+}
+
+/* Buttons */
+#btnPrimary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: var(--purple);
+    color: var(--white);
+    font-family: "Space Mono", monospace;
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 0.65rem 1.4rem;
+    border-radius: 4px;
+    border: none;
+    cursor: pointer;
+    transition:
+        background 0.2s,
+        transform 0.1s;
+}
+
+#btnPrimary:hover {
+    background: #7c3aed;
+    transform: translateY(-2px);
+}
+
+#btnPrimary:active {
+    transform: translateY(0);
+}
+
+#btnSecondary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: transparent;
+    color: var(--text-muted);
+    font-family: "Space Mono", monospace;
+    font-size: 0.95rem;
+    padding: 0.65rem 1.4rem;
+    border-radius: 4px;
+    border: 1.5px solid var(--purple-border);
+    cursor: pointer;
+    transition:
+        border-color 0.2s,
+        color 0.2s,
+        transform 0.1s;
+}
+
+#btnSecondary:hover {
+    border-color: var(--purple);
+    color: var(--purple);
+    transform: translateY(-2px);
+}
+
+#btnSecondary:active {
+    transform: translateY(0);
+}
+
+/* Banner image float animation */
+.bannerImg {
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-12px);
+    }
 }
