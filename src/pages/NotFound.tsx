@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import imgDog from "../assets/fenrir_pixel_art_404-remove-bg.png";
-import classes from "../styles/NotFound.module.css";
+import classes from "../styles/NotFoundPage.module.css";
 
-export const NotFound = () => {
+export const NotFoundPage = () => {
   const navigate = useNavigate();
 
   return (
@@ -16,12 +16,10 @@ export const NotFound = () => {
 
         <div className={classes.heading}>
           <span className={classes.fourOFour}>404</span>
-          <span className={classes.subTitle}>Lost Relay</span>
+          <span className={classes.subTitle}>Lost Page</span>
         </div>
 
         <p className={classes.description}>
-          This page wandered off the network.
-          <br />
           The relay couldn't find what you're looking for.
         </p>
 

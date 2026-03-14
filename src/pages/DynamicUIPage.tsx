@@ -1,14 +1,13 @@
-import { RenderUI } from "../dynamic-ui/ui-engine/RenderUI.tsx";
+import { UIRenderer } from "../core/renderer/UIRenderer";
 
 const blueprint = JSON.stringify({
   type: "column",
   style: {
     height: "100vh",
+    width: "100vw",
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    gap: 24,
-    fontFamily: "sans-serif",
     background: "#fdf6e9",
   },
   children: [
@@ -17,11 +16,7 @@ const blueprint = JSON.stringify({
       id: "textView",
       text: "0",
       value: 0,
-      style: {
-        fontSize: 64,
-        fontWeight: "bold",
-        color: "#222",
-      },
+      style: { fontSize: 64, fontWeight: "bold", color: "#222" },
     },
     {
       type: "row",
@@ -58,25 +53,25 @@ const blueprint = JSON.stringify({
       ],
     },
   ],
-  logic: `
-        const text = fragment.inflate("textView");
-        const plus = fragment.inflate("btnPlus");
-        const minus = fragment.inflate("btnMinus");
+  script: `
+    const text = fragment.inflate("textView");
+    const plus = fragment.inflate("btnPlus");
+    const minus = fragment.inflate("btnMinus");
 
-        plus.onClick(() => {
-          const value = text.getValue();
-          console.log("on plus value", value);
-          text.setValue(value + 1);
-        });
+    plus.onClick(() => {
+      const value = text.getValue();
+      console.log("on plus value", value);
+      text.setValue(value + 1);
+    });
 
-        minus.onClick(() => {
-          const value = text.getValue();
-          console.log("on minus value", value);
-          text.setValue(value - 1);
-        });
+    minus.onClick(() => {
+      const value = text.getValue();
+      console.log("on minus value", value);
+      text.setValue(value - 1);
+    });
   `,
 });
 
-export const DynamicUI = () => {
-  return <RenderUI blueprint={blueprint} />;
-};
+export function DynamicUIPage() {
+  return <UIRenderer blueprint={blueprint} />;
+}

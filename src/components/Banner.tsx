@@ -37,9 +37,7 @@ export const Banner = () => {
         </div>
 
         {/* Right Section */}
-        <div
-          className={`md:col-span-2 md:row-span-4 lg:row-span-2 row-span-4 order-first lg:order-last ${classes.rightSection}`}
-        >
+        <div className={`md:col-span-2 md:row-span-4 lg:row-span-2 row-span-4 order-first lg:order-last ${classes.rightSection}`}>
           <div className="lg:relative lg:w-[671px] lg:h-[671px]">
             <img
               onClick={play}
