@@ -19,17 +19,16 @@ export type RowNode = BaseNode & { type: "row"; children: UINode[] };
 export type BoxNode = BaseNode & { type: "box"; children: UINode[] };
 export type SpacerNode = BaseNode & { type: "spacer" };
 
-// ✅ ImageNode — src เปลี่ยนได้จาก script ผ่าน setValue
 export type ImageNode = BaseNode & {
   type: "image";
-  src: string; // URL ของรูป (เริ่มต้นเป็น "" หรือ placeholder)
+  src: string;
   alt?: string;
-  value?: JsValue; // เก็บ src ล่าสุดไว้ใน value เหมือน TextNode
+  value?: JsValue;
 };
 
 export type VideoNode = BaseNode & {
   type: "video";
-  srcId: string; 
+  srcId: string;
   autoPlay?: boolean;
   muted?: boolean;
   style?: React.CSSProperties;
@@ -73,8 +72,7 @@ export type AssetNode = BaseNode & {
 
 export type AssetList = Record<string, AssetNode>;
 
-// ── Layout ───────────────────────────────────────────────
-
+// Layout
 export type SlotConfig = {
   slotId: string;
   className?: string;
@@ -96,7 +94,7 @@ export type LayoutPreset = {
 
 export type LayoutList = Record<string, LayoutPreset>;
 
-// ── Screen Properties ────────────────────────────────────
+// Screen Properties
 
 export type PropertyType = "string" | "number" | "boolean";
 
@@ -109,7 +107,7 @@ export type PropertyDef = {
 export type ScreenProperties = Record<string, PropertyDef>;
 export type ScreenState = Record<string, JsValue>;
 
-// ── Screen ───────────────────────────────────────────────
+// Screen
 
 export type ScreenHeader = {
   type: "screen";
@@ -139,8 +137,6 @@ export type ScreenBlueprint = {
   detail: ScreenDetail;
 };
 
-// ── App ──────────────────────────────────────────────────
-
 export type AppMeta = {
   appId: string;
   appName: string;
@@ -157,7 +153,5 @@ export type AppBlueprint = {
   layoutList?: LayoutList;
   screens: ScreenBlueprint[];
 };
-
-// ── Runtime ──────────────────────────────────────────────
 
 export type RuntimeBlueprint = { script: string };

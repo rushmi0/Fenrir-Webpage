@@ -133,7 +133,7 @@ export const appBlueprint: AppBlueprint = {
   },
 
   screens: [
-    // ── Counter ──────────────────────────────────────────
+    // Counter
     {
       header: {
         type: "screen",
@@ -244,7 +244,7 @@ export const appBlueprint: AppBlueprint = {
       },
     },
 
-    // ── Detail ───────────────────────────────────────────
+    // Detail
     {
       header: {
         type: "screen",
@@ -320,7 +320,7 @@ export const appBlueprint: AppBlueprint = {
       },
     },
 
-    // ── Camera ───────────────────────────────────────────
+    // Camera
     {
       header: {
         type: "screen",
@@ -450,7 +450,7 @@ export const appBlueprint: AppBlueprint = {
       },
     },
 
-    // ── Gallery ──────────────────────────────────────────
+    // Gallery
     {
       header: {
         type: "screen",
@@ -469,7 +469,6 @@ export const appBlueprint: AppBlueprint = {
         layout: {
           className: "flex flex-col w-full h-full bg-white",
           slots: [
-            // ── top bar ──
             {
               slotId: "topBar",
               className:
@@ -496,7 +495,6 @@ export const appBlueprint: AppBlueprint = {
               ],
             },
 
-            // ── lightbox overlay — ซ่อนเมื่อ src ว่าง ──
             {
               slotId: "lightbox",
               className: "w-full shrink-0 bg-black",
@@ -510,7 +508,6 @@ export const appBlueprint: AppBlueprint = {
                   className: "w-full object-contain",
                   style: { maxHeight: "60vh" },
                 },
-                // action row ใต้รูปใน lightbox
                 {
                   type: "row",
                   className: "flex items-center justify-between px-4 py-3",
@@ -540,7 +537,7 @@ export const appBlueprint: AppBlueprint = {
               ],
             },
 
-            // ── photo grid ──
+            // photo grid
             {
               slotId: "grid",
               className: "flex-1 overflow-auto p-3",

@@ -1,4 +1,9 @@
-import { findNodeValue, updateNodeValue, appendChildToNode, clearChildren } from "../../../core/ui-tree/treeUtils";
+import {
+  findNodeValue,
+  updateNodeValue,
+  appendChildToNode,
+  clearChildren,
+} from "../../../core/ui-tree/treeUtils";
 import { JsValue, UINode } from "../../../core/ui-tree/types";
 import { IPlugin } from "../IPlugin";
 
@@ -6,15 +11,14 @@ export const FragmentPlugin: IPlugin = {
   name: "fragment",
 
   install({ ctx, treeRef, setTree }) {
-
     function createComponentBinding(id: string) {
       const component = ctx.newObject();
 
       const getValue = ctx.newFunction("getValue", () => {
         const value: JsValue = findNodeValue(treeRef.current, id);
-        if (typeof value === "number")  return ctx.newNumber(value);
+        if (typeof value === "number") return ctx.newNumber(value);
         if (typeof value === "boolean") return value ? ctx.true : ctx.false;
-        if (typeof value === "string")  return ctx.newString(value);
+        if (typeof value === "string") return ctx.newString(value);
         return ctx.undefined;
       });
 
@@ -33,9 +37,8 @@ export const FragmentPlugin: IPlugin = {
         fnHandle.dispose();
       });
 
-      // ✅ appendChild(nodeJson) — append UINode เข้า container
       const appendChild = ctx.newFunction("appendChild", (nodeHandle) => {
-        const raw  = ctx.dump(nodeHandle) as string;
+        const raw = ctx.dump(nodeHandle) as string;
         nodeHandle.dispose();
 
         let child: UINode;
@@ -53,7 +56,6 @@ export const FragmentPlugin: IPlugin = {
         });
       });
 
-      // ✅ clearChildren() — ล้าง children ของ container
       const clearChildrenFn = ctx.newFunction("clearChildren", () => {
         setTree((prev) => {
           const updated = clearChildren(prev, id);
@@ -62,10 +64,10 @@ export const FragmentPlugin: IPlugin = {
         });
       });
 
-      ctx.setProp(component, "getValue",      getValue);
-      ctx.setProp(component, "setValue",      setValue);
-      ctx.setProp(component, "onClick",       onClick);
-      ctx.setProp(component, "appendChild",   appendChild);
+      ctx.setProp(component, "getValue", getValue);
+      ctx.setProp(component, "setValue", setValue);
+      ctx.setProp(component, "onClick", onClick);
+      ctx.setProp(component, "appendChild", appendChild);
       ctx.setProp(component, "clearChildren", clearChildrenFn);
 
       getValue.dispose();

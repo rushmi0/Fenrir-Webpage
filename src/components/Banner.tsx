@@ -11,7 +11,7 @@ export const Banner = () => {
   };
 
   return (
-    <div className="container mx-auto">
+    <div className="container mx-auto mt-20">
       <div className="flex justify-between items-center pt-[5%] col-lg-12 col-md-12 col-sm-12 flex-col-reverse lg:flex-row-reverse xl:flex-row grid lg:grid-rows-none lg:grid-cols-4 grid-rows-4">
         {/* Left Section */}
         <div
@@ -37,7 +37,9 @@ export const Banner = () => {
         </div>
 
         {/* Right Section */}
-        <div className={`md:col-span-2 md:row-span-4 lg:row-span-2 row-span-4 order-first lg:order-last ${classes.rightSection}`}>
+        <div
+          className={`md:col-span-2 md:row-span-4 lg:row-span-2 row-span-4 order-first lg:order-last ${classes.rightSection}`}
+        >
           <div className="lg:relative lg:w-[671px] lg:h-[671px]">
             <img
               onClick={play}

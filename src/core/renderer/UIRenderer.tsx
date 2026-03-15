@@ -240,7 +240,21 @@ export function UIRenderer({
   const liveLayout = buildLiveLayout(expandedLayout, tree, slotChildCounts);
 
   return (
-    <div className={parsed.header.className} style={parsed.header.style}>
+    <div
+      className={parsed.header.className}
+      style={{
+        width: "100%",
+        height: "100dvh",
+        overflow: "hidden",
+        display: "flex",
+        flexDirection: "column",
+        boxSizing: "border-box",
+        overscrollBehavior: "none",
+        margin: 0,
+        padding: 0,
+        ...parsed.header.style,
+      }}
+    >
       <LayoutRenderer layout={liveLayout} renderNode={renderNode} />
     </div>
   );
