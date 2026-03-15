@@ -5,9 +5,10 @@ import { UIRenderer } from "./core/renderer/UIRenderer";
 import {ScreenBlueprint} from "./core/ui-tree/types.ts";
 import { appBlueprint } from "./pages/DynamicUIPage";
 import "./App.css";
+import HomePage from "./pages/HomePage.tsx";
 
 
-const dynamicRoutes: RouteObject[] = appBlueprint.screens.map((screen : ScreenBlueprint) => ({
+const dynamicRoutes: RouteObject[] = appBlueprint.application.map((screen : ScreenBlueprint) => ({
   path: screen.header.path,
   element: (
     <UIRenderer
@@ -19,6 +20,7 @@ const dynamicRoutes: RouteObject[] = appBlueprint.screens.map((screen : ScreenBl
 
 const routes: RouteObject[] = [
   { path: "/",  element: <LandingPage /> },
+  { path: "/home", element: <HomePage/> },
   ...dynamicRoutes,
   { path: "*",  element: <NotFoundPage /> },
 ];

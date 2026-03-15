@@ -68,7 +68,7 @@ export type ScreenBlueprint = {
 
 
 export type AppBlueprint = {
-  screens: ScreenBlueprint[];
+  application: ScreenBlueprint[];
 };
 
 export type RuntimeBlueprint = {

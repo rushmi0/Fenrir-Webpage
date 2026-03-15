@@ -20,7 +20,7 @@ export function AppRenderer({
 
   const routes: RouteObject[] = useMemo(() => {
 
-    return blueprint.screens.map(
+    return blueprint.application.map(
       (screen: ScreenBlueprint): RouteObject => ({
         path: screen.header.path,
         element: (

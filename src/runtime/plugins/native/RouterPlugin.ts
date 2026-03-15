@@ -1,6 +1,5 @@
 import { IPlugin } from "../IPlugin.ts";
 
-// NavigateFunction จาก react-router-dom ส่งเข้ามาผ่าน deps ที่ extend
 export type RouterPluginDeps = {
   navigate: (path: string, options?: { replace?: boolean }) => void;
   getParams: () => Record<string, string>;

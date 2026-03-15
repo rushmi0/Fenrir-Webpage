@@ -10,19 +10,19 @@ import {
 import { createHostBridge } from "./HostBridge";
 import {
   DEFAULT_ENGINE_CONFIG,
-  RuntimeEngineConfig,
-} from "./RuntimeEngineConfig";
+  EngineConfig,
+} from "./EngineConfig.ts";
 
 
 type UseRuntimeOptions = {
   blueprint: RuntimeBlueprint;
   treeRef: React.RefObject<UINode>;
   setTree: React.Dispatch<React.SetStateAction<UINode>>;
-  config?: RuntimeEngineConfig;
+  config?: EngineConfig;
 };
 
 
-export function useRuntime({
+export function VM({
   blueprint,
   treeRef,
   setTree,
@@ -85,7 +85,9 @@ export function useRuntime({
       }
     };
 
-    init();
+    init().catch((err: unknown) => {
+      console.error("[Runtime] init failed:", err);
+    });
 
     return () => {
       mounted = false;
@@ -115,9 +117,7 @@ export function useRuntime({
     );
 
     if (result.error) {
-      console.error(
-        ctx.dump(result.error),
-      );
+      console.error(ctx.dump(result.error));
       result.error.dispose();
     } else {
       result.dispose();

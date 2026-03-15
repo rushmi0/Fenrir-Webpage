@@ -1,7 +1,7 @@
 import { AppBlueprint } from "../core/ui-tree/types";
 
 export const appBlueprint: AppBlueprint = {
-  screens: [
+  application: [
     {
       header: {
         type: "screen",
@@ -44,7 +44,7 @@ export const appBlueprint: AppBlueprint = {
                   {
                     type: "button",
                     id: "btnGoDetail",
-                    text: "ดูรายละเอียด →",
+                    text: "view detail →",
                     className:
                       "px-6 py-3 text-xl bg-blue-600 text-white rounded-lg",
                   },
@@ -109,7 +109,7 @@ export const appBlueprint: AppBlueprint = {
               {
                 type: "button",
                 id: "btnBack",
-                text: "← กลับ",
+                text: "← go back",
                 className:
                   "px-6 py-3 text-xl bg-gray-800 text-white rounded-lg",
               },

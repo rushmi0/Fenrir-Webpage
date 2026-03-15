@@ -8,7 +8,7 @@ import { CameraPlugin } from "./plugins/native/CameraPlugin.ts";
 import { PrintPlugin } from "./plugins/native/PrintPlugin.ts";
 
 
-export type RuntimeEngineConfig = {
+export type EngineConfig = {
   plugins?: IPlugin[];
   debug?: boolean;
   onScriptError?: "throw" | "warn" | "silent";
@@ -21,7 +21,7 @@ export const DEFAULT_PLUGINS: IPlugin[] = [
   CameraPlugin,
 ];
 
-export const DEFAULT_ENGINE_CONFIG: Required<RuntimeEngineConfig> = {
+export const DEFAULT_ENGINE_CONFIG: Required<EngineConfig> = {
   plugins: DEFAULT_PLUGINS,
   debug: false,
   onScriptError: "warn",

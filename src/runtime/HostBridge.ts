@@ -2,7 +2,7 @@ import { QuickJSContext } from "quickjs-emscripten";
 import React from "react";
 import { UINode } from "../core/ui-tree/types";
 import { IPlugin, HostBindingDeps } from "./plugins/IPlugin";
-import { DEFAULT_PLUGINS } from "./RuntimeEngineConfig";
+import { DEFAULT_PLUGINS } from "./EngineConfig.ts";
 
 type HostBridgeOptions = {
   ctx: QuickJSContext;

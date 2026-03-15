@@ -1,5 +1,17 @@
 
 import React from "react";
+import { QuickJSContext } from "quickjs-emscripten";
+import { JsValue, ScreenState } from "../../../core/ui-tree/types.ts";
+import { IPlugin } from "../IPlugin.ts";
+import { ViewModelStore } from "../../ViewModelStore.ts";
+
+function jsValueToHandle(ctx: QuickJSContext, value: JsValue) {
+  if (typeof value === "number")  return ctx.newNumber(value);
+  if (typeof value === "boolean") return value ? ctx.true : ctx.false;
+  if (typeof value === "string")  return ctx.newString(value);
+  return ctx.null;
+}
+
 export type SharedStateStore = {
   get: (key: string) => JsValue;
   set: (key: string, value: JsValue) => void;
@@ -19,8 +31,6 @@ export function createStatePlugin(deps: StatePluginDeps): IPlugin {
     install({ ctx }) {
       const obj = ctx.newObject();
 
-      // ── local state ──
-
       const get = ctx.newFunction("get", (keyHandle) => {
         const key = ctx.dump(keyHandle) as string;
         keyHandle.dispose();
@@ -38,8 +48,6 @@ export function createStatePlugin(deps: StatePluginDeps): IPlugin {
         deps.localState.current = { ...deps.localState.current, [key]: value };
       });
 
-      // ── shared (cache) ──
-
       const share = ctx.newFunction("share", (keyHandle, valueHandle) => {
         const key   = ctx.dump(keyHandle)   as string;
         const value = ctx.dump(valueHandle) as JsValue;
@@ -54,8 +62,6 @@ export function createStatePlugin(deps: StatePluginDeps): IPlugin {
         return jsValueToHandle(ctx, deps.sharedStore.get(key));
       });
 
-      // ── viewmodel ──
-
       const viewmodelObj = ctx.newObject();
 
       // viewmodel.setActive(0 | 1)
@@ -66,7 +72,6 @@ export function createStatePlugin(deps: StatePluginDeps): IPlugin {
       });
 
       // viewmodel.getFromScreen("/counter", "count")
-      // อ่าน screenState จาก screen อื่นที่ยัง active อยู่
       const getFromScreen = ctx.newFunction(
         "getFromScreen",
         (pathHandle, keyHandle) => {
@@ -104,15 +109,3 @@ export function createStatePlugin(deps: StatePluginDeps): IPlugin {
   };
 }
 
-// ── helper ──
-import { QuickJSContext } from "quickjs-emscripten";
-import { JsValue, ScreenState } from "../../../core/ui-tree/types.ts";
-import { IPlugin } from "../IPlugin.ts";
-import { ViewModelStore } from "../../ViewModelStore.ts";
-
-function jsValueToHandle(ctx: QuickJSContext, value: JsValue) {
-  if (typeof value === "number")  return ctx.newNumber(value);
-  if (typeof value === "boolean") return value ? ctx.true : ctx.false;
-  if (typeof value === "string")  return ctx.newString(value);
-  return ctx.null;
-}
