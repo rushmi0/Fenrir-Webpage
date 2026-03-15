@@ -1,7 +1,12 @@
 import { CSSProperties } from "react";
 
-type SpacerProps = { style?: CSSProperties };
+type SpacerProps = {
+  className?: string;
+  style?: CSSProperties;
+};
 
-export function Spacer({ style }: SpacerProps) {
-  return <div style={{ flex: 1, ...style }} />;
+export function Spacer({ className, style }: SpacerProps) {
+  const resolvedClass = ["flex-1", className].filter(Boolean).join(" ");
+
+  return <div className={resolvedClass} style={style} />;
 }

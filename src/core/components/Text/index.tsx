@@ -1,7 +1,15 @@
 import { CSSProperties } from "react";
 
-type TextProps = { text: string; style?: CSSProperties };
+type TextProps = {
+  text: string;
+  className?: string;
+  style?: CSSProperties;
+};
 
-export function Text({ text, style }: TextProps) {
-  return <span style={style}>{text}</span>;
+export function Text({ text, className, style }: TextProps) {
+  return (
+    <span className={className} style={style}>
+      {text}
+    </span>
+  );
 }

@@ -1,75 +1,69 @@
 import { UIRenderer } from "../core/renderer/UIRenderer";
 
 const blueprint = JSON.stringify({
-  type: "column",
-  style: {
-    height: "100vh",
-    width: "100vw",
-    display: "flex",
-    justifyContent: "center",
-    alignItems: "center",
-    background: "#fdf6e9",
+  header: {
+    type: "screen",
+    title: "Counter Screen",
+    className: "flex flex-col w-screen h-screen bg-amber-50",
   },
-  children: [
-    {
-      type: "text",
-      id: "textView",
-      text: "0",
-      value: 0,
-      style: { fontSize: 64, fontWeight: "bold", color: "#222" },
-    },
-    {
-      type: "row",
-      style: { gap: 16 },
-      children: [
-        {
-          type: "button",
-          id: "btnPlus",
-          text: "+",
-          style: {
-            padding: "12px 24px",
-            fontSize: 20,
-            borderRadius: 8,
-            background: "#222",
-            color: "white",
-            border: "none",
-            cursor: "pointer",
-          },
-        },
-        {
-          type: "button",
-          id: "btnMinus",
-          text: "-",
-          style: {
-            padding: "12px 24px",
-            fontSize: 20,
-            borderRadius: 8,
-            background: "#999",
-            color: "white",
-            border: "none",
-            cursor: "pointer",
-          },
-        },
-      ],
-    },
-  ],
-  script: `
-    const text = fragment.inflate("textView");
-    const plus = fragment.inflate("btnPlus");
-    const minus = fragment.inflate("btnMinus");
+  detail: {
+    children: [
+      {
+        type: "column",
+        className: "flex flex-col items-center justify-center flex-1 gap-6",
 
-    plus.onClick(() => {
-      const value = text.getValue();
-      console.log("on plus value", value);
-      text.setValue(value + 1);
-    });
+        children: [
+          {
+            type: "text",
+            id: "textView",
+            text: "0",
+            value: 0,
+            className: "text-5xl font-bold text-black",
+          },
 
-    minus.onClick(() => {
-      const value = text.getValue();
-      console.log("on minus value", value);
-      text.setValue(value - 1);
-    });
-  `,
+          {
+            type: "row",
+            className: "flex gap-4",
+
+            children: [
+              {
+                type: "button",
+                id: "btnPlus",
+                text: "+",
+                className: "px-6 py-3 text-xl bg-black text-white rounded-lg",
+              },
+
+              {
+                type: "button",
+                id: "btnMinus",
+                text: "-",
+                className:
+                  "px-6 py-3 text-xl bg-gray-400 text-white rounded-lg",
+              },
+            ],
+          },
+        ],
+      },
+    ],
+
+    script: `
+      const text  = fragment.inflate("textView");
+      const plus  = fragment.inflate("btnPlus");
+      const minus = fragment.inflate("btnMinus");
+
+      plus.onClick(() => {
+        const value = text.getValue();
+        print(" on plus: ", value + 1);
+        text.setValue(value + 1);
+      });
+
+      minus.onClick(() => {
+        const value = text.getValue();
+        print(" on minus: ", value - 1);
+        text.setValue(value - 1);
+      });
+    `,
+  },
 });
 
 export function DynamicUIPage() {

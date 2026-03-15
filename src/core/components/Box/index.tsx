@@ -1,7 +1,17 @@
 import { CSSProperties, ReactNode } from "react";
 
-type BoxProps = { children?: ReactNode; style?: CSSProperties };
+type BoxProps = {
+  children?: ReactNode;
+  className?: string;
+  style?: CSSProperties;
+};
 
-export function Box({ children, style }: BoxProps) {
-  return <div style={style}>{children}</div>;
+export function Box({ children, className, style }: BoxProps) {
+  const resolvedClass = ["box", className].filter(Boolean).join(" ");
+
+  return (
+    <div className={resolvedClass} style={style}>
+      {children}
+    </div>
+  );
 }

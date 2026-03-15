@@ -4,6 +4,7 @@ export type JsValue = string | number | boolean | null | undefined;
 
 export type BaseNode = {
   id?: string;
+  className?: string;
   style?: React.CSSProperties;
 };
 
@@ -45,6 +46,31 @@ export type UINode =
   | BoxNode
   | SpacerNode;
 
-export type Blueprint = ColumnNode & {
+
+/* ---------- Blueprint ---------- */
+
+export type ScreenHeader = {
+  type: "screen";
+  title?: string;
+  className?: string;
+  safeArea?: boolean;
+};
+
+export type BlueprintHeader = ScreenHeader;
+
+export type BlueprintDetail = {
+  children: UINode[];
+  script: string;
+};
+
+export type Blueprint = {
+  header: BlueprintHeader;
+  detail: BlueprintDetail;
+};
+
+
+/* ---------- Runtime ---------- */
+
+export type RuntimeBlueprint = {
   script: string;
 };
