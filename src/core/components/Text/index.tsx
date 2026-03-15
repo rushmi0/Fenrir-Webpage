@@ -7,8 +7,9 @@ type TextProps = {
 };
 
 export function Text({ text, className, style }: TextProps) {
+  const resolvedClass = ["", className].filter(Boolean).join(" ");
   return (
-    <span className={className} style={style}>
+    <span className={resolvedClass} style={style}>
       {text}
     </span>
   );

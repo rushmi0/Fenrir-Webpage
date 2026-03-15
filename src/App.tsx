@@ -1,28 +1,29 @@
-import { useRoutes, RouteObject } from "react-router-dom";
+import { useRoutes, RouteObject, Navigate } from "react-router-dom";
 import { LandingPage } from "./pages/LandingPage";
 import { NotFoundPage } from "./pages/NotFound";
 import { UIRenderer } from "./core/renderer/UIRenderer";
-import {ScreenBlueprint} from "./core/ui-tree/types.ts";
 import { appBlueprint } from "./pages/DynamicUIPage";
 import "./App.css";
-import HomePage from "./pages/HomePage.tsx";
 
-
-const dynamicRoutes: RouteObject[] = appBlueprint.application.map((screen : ScreenBlueprint) => ({
-  path: screen.header.path,
+const blueprintRoutes: RouteObject[] = appBlueprint.screens.map((screen) => ({
+  path:    screen.header.path,
   element: (
-    <UIRenderer
-      key={screen.header.path}
-      blueprint={JSON.stringify(screen)}
-    />
+      <UIRenderer
+          key={screen.header.path}
+          blueprint={JSON.stringify(screen)}
+          appBlueprint={appBlueprint}
+      />
   ),
 }));
 
 const routes: RouteObject[] = [
-  { path: "/",  element: <LandingPage /> },
-  { path: "/home", element: <HomePage/> },
-  ...dynamicRoutes,
-  { path: "*",  element: <NotFoundPage /> },
+  { path: "/", element: <LandingPage /> },
+  {
+    path:    "/app",
+    element: <Navigate to={appBlueprint.meta.initialPath} replace />,
+  },
+  ...blueprintRoutes,
+  { path: "*", element: <NotFoundPage /> },
 ];
 
 function App() {
