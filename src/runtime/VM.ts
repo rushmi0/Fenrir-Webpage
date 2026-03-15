@@ -2,17 +2,10 @@ import { useEffect, useRef, useCallback } from "react";
 import { getQuickJS, QuickJSContext } from "quickjs-emscripten";
 import React from "react";
 
-import {
-  RuntimeBlueprint,
-  UINode,
-} from "../core/ui-tree/types";
+import { RuntimeBlueprint, UINode } from "../core/ui-tree/types";
 
 import { createHostBridge } from "./HostBridge";
-import {
-  DEFAULT_ENGINE_CONFIG,
-  EngineConfig,
-} from "./EngineConfig.ts";
-
+import { DEFAULT_ENGINE_CONFIG, EngineConfig } from "./EngineConfig.ts";
 
 type UseRuntimeOptions = {
   blueprint: RuntimeBlueprint;
@@ -21,14 +14,7 @@ type UseRuntimeOptions = {
   config?: EngineConfig;
 };
 
-
-export function VM({
-  blueprint,
-  treeRef,
-  setTree,
-  config,
-}: UseRuntimeOptions) {
-
+export function VM({ blueprint, treeRef, setTree, config }: UseRuntimeOptions) {
   const ctxRef = useRef<QuickJSContext | null>(null);
   const aliveRef = useRef(false);
 
@@ -50,11 +36,9 @@ export function VM({
   });
 
   useEffect(() => {
-
     let mounted = true;
 
     const init = async () => {
-
       const QuickJS = await getQuickJS();
       if (!mounted) return;
 
@@ -75,10 +59,7 @@ export function VM({
       const result = ctx.evalCode(blueprint.script);
 
       if (result.error) {
-        console.error(
-          "[Runtime]",
-          ctx.dump(result.error),
-        );
+        console.error("[Runtime]", ctx.dump(result.error));
         result.error.dispose();
       } else {
         result.dispose();
@@ -95,12 +76,9 @@ export function VM({
       ctxRef.current?.dispose();
       ctxRef.current = null;
     };
-
   }, [blueprint.script]);
 
-
   const triggerEvent = useCallback((id?: string) => {
-
     if (!id) return;
 
     if (!aliveRef.current || !ctxRef.current) {
@@ -113,7 +91,7 @@ export function VM({
       `(() => {
         const f = globalThis["__onClick_${id}"];
         if (f) f();
-      })()`
+      })()`,
     );
 
     if (result.error) {
@@ -122,9 +100,7 @@ export function VM({
     } else {
       result.dispose();
     }
-
   }, []);
-
 
   return { triggerEvent };
 }

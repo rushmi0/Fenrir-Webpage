@@ -48,12 +48,12 @@ export function createRouterPlugin(routerDeps: RouterPluginDeps): IPlugin {
         return value !== undefined ? ctx.newString(value) : ctx.undefined;
       });
 
-      ctx.setProp(obj, "push",           push);
-      ctx.setProp(obj, "replace",        replace);
-      ctx.setProp(obj, "back",           back);
-      ctx.setProp(obj, "getParam",       getParam);
+      ctx.setProp(obj, "push", push);
+      ctx.setProp(obj, "replace", replace);
+      ctx.setProp(obj, "back", back);
+      ctx.setProp(obj, "getParam", getParam);
       ctx.setProp(obj, "getSearchParam", getSearchParam);
-      ctx.setProp(ctx.global, "router",  obj);
+      ctx.setProp(ctx.global, "router", obj);
 
       push.dispose();
       replace.dispose();

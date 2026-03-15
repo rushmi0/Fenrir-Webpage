@@ -1,4 +1,3 @@
-
 import React from "react";
 import { QuickJSContext } from "quickjs-emscripten";
 import { JsValue, ScreenState } from "../../../core/ui-tree/types.ts";
@@ -6,9 +5,9 @@ import { IPlugin } from "../IPlugin.ts";
 import { ViewModelStore } from "../../ViewModelStore.ts";
 
 function jsValueToHandle(ctx: QuickJSContext, value: JsValue) {
-  if (typeof value === "number")  return ctx.newNumber(value);
+  if (typeof value === "number") return ctx.newNumber(value);
   if (typeof value === "boolean") return value ? ctx.true : ctx.false;
-  if (typeof value === "string")  return ctx.newString(value);
+  if (typeof value === "string") return ctx.newString(value);
   return ctx.null;
 }
 
@@ -39,7 +38,7 @@ export function createStatePlugin(deps: StatePluginDeps): IPlugin {
       });
 
       const set = ctx.newFunction("set", (keyHandle, valueHandle) => {
-        const key   = ctx.dump(keyHandle)   as string;
+        const key = ctx.dump(keyHandle) as string;
         const value = ctx.dump(valueHandle) as JsValue;
         keyHandle.dispose();
         valueHandle.dispose();
@@ -49,7 +48,7 @@ export function createStatePlugin(deps: StatePluginDeps): IPlugin {
       });
 
       const share = ctx.newFunction("share", (keyHandle, valueHandle) => {
-        const key   = ctx.dump(keyHandle)   as string;
+        const key = ctx.dump(keyHandle) as string;
         const value = ctx.dump(valueHandle) as JsValue;
         keyHandle.dispose();
         valueHandle.dispose();
@@ -75,8 +74,8 @@ export function createStatePlugin(deps: StatePluginDeps): IPlugin {
       const getFromScreen = ctx.newFunction(
         "getFromScreen",
         (pathHandle, keyHandle) => {
-          const path  = ctx.dump(pathHandle) as string;
-          const key   = ctx.dump(keyHandle)  as string;
+          const path = ctx.dump(pathHandle) as string;
+          const key = ctx.dump(keyHandle) as string;
           pathHandle.dispose();
           keyHandle.dispose();
 
@@ -86,17 +85,17 @@ export function createStatePlugin(deps: StatePluginDeps): IPlugin {
         },
       );
 
-      ctx.setProp(viewmodelObj, "setActive",     setActive);
+      ctx.setProp(viewmodelObj, "setActive", setActive);
       ctx.setProp(viewmodelObj, "getFromScreen", getFromScreen);
 
       setActive.dispose();
       getFromScreen.dispose();
 
-      ctx.setProp(obj, "get",          get);
-      ctx.setProp(obj, "set",          set);
-      ctx.setProp(obj, "share",        share);
-      ctx.setProp(obj, "getShared",    getShared);
-      ctx.setProp(obj, "viewmodel",    viewmodelObj);
+      ctx.setProp(obj, "get", get);
+      ctx.setProp(obj, "set", set);
+      ctx.setProp(obj, "share", share);
+      ctx.setProp(obj, "getShared", getShared);
+      ctx.setProp(obj, "viewmodel", viewmodelObj);
       ctx.setProp(ctx.global, "state", obj);
 
       get.dispose();
@@ -108,4 +107,3 @@ export function createStatePlugin(deps: StatePluginDeps): IPlugin {
     },
   };
 }
-

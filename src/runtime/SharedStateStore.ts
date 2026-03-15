@@ -5,5 +5,7 @@ const cache: Record<string, JsValue> = {};
 
 export const screenCache: SharedStateStore = {
   get: (key) => cache[key],
-  set: (key, value) => { cache[key] = value; },
+  set: (key, value) => {
+    cache[key] = value;
+  },
 };

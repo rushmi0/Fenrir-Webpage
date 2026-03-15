@@ -29,7 +29,7 @@ export const Banner = () => {
           <div
             className={`w-full flex gap-3 justify-center lg:justify-start mt-[50px] ${classes.btnGroup}`}
           >
-            <button id={classes.btnPrimary} onClick={() => navigate("/home")}>
+            <button id={classes.btnPrimary} onClick={() => navigate("/app")}>
               Start &rsaquo;
             </button>
             <button id={classes.btnSecondary}>Learn More</button>

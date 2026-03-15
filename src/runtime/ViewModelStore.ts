@@ -10,7 +10,6 @@ export type ScreenViewModel = {
 const store = new Map<string, ScreenViewModel>();
 
 export const ViewModelStore = {
-
   getOrCreate(
     path: string,
     initialTree: UINode,
@@ -32,11 +31,7 @@ export const ViewModelStore = {
     return vm;
   },
 
-  save(
-    path: string,
-    uiTree: UINode,
-    screenState: ScreenState,
-  ): void {
+  save(path: string, uiTree: UINode, screenState: ScreenState): void {
     const existing = store.get(path);
     if (!existing) return;
 

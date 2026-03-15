@@ -6,7 +6,7 @@ import { ConsolePlugin } from "./plugins/native/ConsolePlugin.ts";
 import { FragmentPlugin } from "./plugins/native/FragmentPlugin.ts";
 import { CameraPlugin } from "./plugins/native/CameraPlugin.ts";
 import { PrintPlugin } from "./plugins/native/PrintPlugin.ts";
-
+import { DownloadPlugin } from "./plugins/native/DownloadPlugin.ts";
 
 export type EngineConfig = {
   plugins?: IPlugin[];
@@ -19,6 +19,7 @@ export const DEFAULT_PLUGINS: IPlugin[] = [
   ConsolePlugin,
   FragmentPlugin,
   CameraPlugin,
+  DownloadPlugin,
 ];
 
 export const DEFAULT_ENGINE_CONFIG: Required<EngineConfig> = {

@@ -6,20 +6,20 @@ import { appBlueprint } from "./pages/DynamicUIPage";
 import "./App.css";
 
 const blueprintRoutes: RouteObject[] = appBlueprint.screens.map((screen) => ({
-  path:    screen.header.path,
+  path: screen.header.path,
   element: (
-      <UIRenderer
-          key={screen.header.path}
-          blueprint={JSON.stringify(screen)}
-          appBlueprint={appBlueprint}
-      />
+    <UIRenderer
+      key={screen.header.path}
+      blueprint={JSON.stringify(screen)}
+      appBlueprint={appBlueprint}
+    />
   ),
 }));
 
 const routes: RouteObject[] = [
   { path: "/", element: <LandingPage /> },
   {
-    path:    "/app",
+    path: "/app",
     element: <Navigate to={appBlueprint.meta.initialPath} replace />,
   },
   ...blueprintRoutes,
