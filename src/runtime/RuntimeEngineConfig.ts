@@ -2,10 +2,10 @@ import { QuickJSContext } from "quickjs-emscripten";
 import React from "react";
 import { UINode } from "../core/ui-tree/types";
 import { IPlugin, HostBindingDeps } from "./plugins/IPlugin";
-import { ConsolePlugin } from "./plugins/ConsolePlugin";
-import { FragmentPlugin } from "./plugins/FragmentPlugin";
-import { CameraPlugin } from "./plugins/CameraPlugin";
-import { PrintPlugin } from "./plugins/PrintPlugin";
+import { ConsolePlugin } from "./plugins/native/ConsolePlugin.ts";
+import { FragmentPlugin } from "./plugins/native/FragmentPlugin.ts";
+import { CameraPlugin } from "./plugins/native/CameraPlugin.ts";
+import { PrintPlugin } from "./plugins/native/PrintPlugin.ts";
 
 
 export type RuntimeEngineConfig = {

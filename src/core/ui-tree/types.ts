@@ -46,30 +46,30 @@ export type UINode =
   | BoxNode
   | SpacerNode;
 
-
-/* ---------- Blueprint ---------- */
-
 export type ScreenHeader = {
   type: "screen";
+  path: string;
   title?: string;
   className?: string;
-  safeArea?: boolean;
 };
 
-export type BlueprintHeader = ScreenHeader;
+export type ScreenState = Record<string, JsValue>;
 
-export type BlueprintDetail = {
+export type ScreenDetail = {
   children: UINode[];
   script: string;
 };
 
-export type Blueprint = {
-  header: BlueprintHeader;
-  detail: BlueprintDetail;
+export type ScreenBlueprint = {
+  header: ScreenHeader;
+  state?: ScreenState;
+  detail: ScreenDetail;
 };
 
 
-/* ---------- Runtime ---------- */
+export type AppBlueprint = {
+  screens: ScreenBlueprint[];
+};
 
 export type RuntimeBlueprint = {
   script: string;
